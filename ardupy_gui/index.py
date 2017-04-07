@@ -5,10 +5,23 @@ from cefpython3 import cefpython as cef
 import platform
 import sys
 import os
+import time
+from echo import SerialEcho
+
 
 class External(object):
-    def test_function(self):
-        print("Hello World!");
+    def __init__(self,tty='/dev/ttyACM0'):
+        self.ser = SerialEcho(tty)
+
+    def send(self,string):
+        """send a character string to the arduino via serial,
+        then read all characters off the arduino's buffer
+        """
+        self.ser.send_chars(string)
+    
+    def echo(self,js_callback):
+        js_callback.Call(self.ser.recieve_chars(),lambda:None)
+
 
 def main():
     url= 'file://%s/index.html'%os.getcwd()
@@ -24,7 +37,7 @@ def main():
     #set up the browser's javascript bindings
     external = External()
     bindings = cef.JavascriptBindings()
-    bindings.SetFunction("test_function", external.test_function)
+    bindings.SetFunction("echo", external.echo)
     bindings.SetObject("external",external)
     browser.SetJavascriptBindings(bindings)
     cef.MessageLoop()

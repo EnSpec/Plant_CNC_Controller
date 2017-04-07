@@ -6,23 +6,33 @@
 <body>
     <div class="container">
         <div class="row" >
-            <h4>Form</h4>
+            <h4>Arduino Echo</h4>
             <div class="col-sm-12">
                 <form>
                   <div class="form-group">
-                    <label for="formGroupExampleInput">Input Stream</label>
+                    <label for="formGroupExampleInput">Input Stream:</label>
                     <input type="text" class="form-control" id="instr">
                   </div>
+                  <button id="send" type="button" class="btn btn-primary">Send</button>
                   <div class="form-group">
-                    <label for="formGroupExampleInput2">Output Stream</label>
-                    <input type="text" class="form-control" id="outstr">
+                    <label for="formGroupExampleInput2">Output Stream:</label>
+                    <div id="outdiv"></div>
                   </div>
                 </form>                
             </div>
         </div>
     </div>
 <script type="text/javascript">
-    console.log("Hello World!");
-    external.test_function();
+    $(document).ready(function(){
+        $('#send').click(function(){
+            external.send($('#instr').val());
+            setTimeout(function(){
+                external.echo(function(py_text,py_callback){
+                    console.log(py_text);
+                    $('#outdiv').append('<p>'+py_text+'</p>')
+                });
+            },500);
+        });
+    });
 </script>
 </body>
