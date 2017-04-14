@@ -1,5 +1,6 @@
 import serial
-
+import asyncio
+import time
 MENU= \
 """
 1. Send characters
@@ -7,9 +8,11 @@ MENU= \
 3. Quit
 """
 class SerialEcho(object):
+    EMPTY_BUFFSTR = "No bytes on buffer"
     def __init__(self,tty,null_zero=True):
         self.ser = serial.Serial(tty,timeout=3)
         self.null_zero = null_zero
+        self.polling = False
 
     def send_chars(self,chars):
         self.ser.write(chars.encode('ascii'))
@@ -20,8 +23,8 @@ class SerialEcho(object):
         if(self.ser.in_waiting):
             return self.ser.read(self.ser.in_waiting).decode('ascii')
         else:
-            return "No bytes on buffer"
-    
+            return SerialEcho.EMPTY_BUFFSTR
+
     def close(self):
         self.ser.close()
 

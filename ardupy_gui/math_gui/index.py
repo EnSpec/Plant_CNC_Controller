@@ -10,14 +10,22 @@ from echo import SerialEcho
 
 
 class External(object):
+    KEY_CODES = {
+        'SUM': ',s',
+        'PROD':',p',
+        'MEAN':',m',
+        'CLEAR':',c',
+        'EMPTY_BUFFSTR':SerialEcho.EMPTY_BUFFSTR
+    }
     def __init__(self,tty='/dev/ttyACM0'):
         self.ser = SerialEcho(tty)
 
-    def send(self,string):
+    def send(self,string,sep=','):
         """send a character string to the arduino via serial,
         then read all characters off the arduino's buffer
         """
-        self.ser.send_chars(string)
+        for substr in string.split(sep):
+            self.ser.send_chars(substr)
     
     def echo(self,js_callback):
         js_callback.Call(self.ser.recieve_chars(),lambda:None)
@@ -39,6 +47,7 @@ def main():
     bindings = cef.JavascriptBindings()
     bindings.SetFunction("echo", external.echo)
     bindings.SetObject("external",external)
+    bindings.SetProperty("KEY_CODES",External.KEY_CODES)
     browser.SetJavascriptBindings(bindings)
     cef.MessageLoop()
     cef.Shutdown()
