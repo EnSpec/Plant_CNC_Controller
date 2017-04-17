@@ -26,6 +26,7 @@ void TripleMotors::begin(){
 void TripleMotors::run(){
   stepper1->run();
   stepper2->run();
+  stepper3->run();
 }
 
 void TripleMotors::moveToX(int xt){
@@ -34,7 +35,7 @@ void TripleMotors::moveToX(int xt){
 }
 
 void TripleMotors::moveToY(int yt){
-  //stepper3->moveTo(yt);
+  stepper3->moveTo(yt);
 }
 
 int TripleMotors::getX(){
@@ -51,5 +52,5 @@ void TripleMotors::moveToCoords(int x, int y){
 
 
 int TripleMotors::nRunning(){
-  return(stepper1->distanceToGo() != 0);// + (ystepper.distanceToGo() != 0);
+  return(stepper1->distanceToGo() != 0) + (stepper3->distanceToGo() != 0);
 }
