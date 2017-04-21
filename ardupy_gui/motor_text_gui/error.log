@@ -1,0 +1,167 @@
+
+[2017-04-17 16:23:53] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 30, in send
+    int_strings = self.parse_coords(string)
+  File "index.py", line 25, in parse_coords
+    for pair in coords.split()],[])
+NameError: name 'coords' is not defined
+
+
+[2017-04-17 16:50:36] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 35, in echo
+    js_callback.Call(self.ser.recieve_chars(),lambda:None)
+  File "/home/mwestphall/ardupy/ardupy_gui/motor_text_gui/echo.py", line 23, in recieve_chars
+    if(self.ser.in_waiting):
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 467, in in_waiting
+    s = fcntl.ioctl(self.fd, TIOCINQ, TIOCM_zero_str)
+OSError: [Errno 5] Input/output error
+
+
+[2017-04-18 10:15:41] Traceback (most recent call last):
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 534, in write
+    n = os.write(self.fd, d)
+OSError: [Errno 5] Input/output error
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 32, in send
+    self.ser.send_chars(substr,use_end)
+  File "/home/mwestphall/ardupy/ardupy_gui/motor_text_gui/echo.py", line 18, in send_chars
+    self.ser.write(chars.encode('ascii'))
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 565, in write
+    raise SerialException('write failed: {}'.format(v))
+serial.serialutil.SerialException: write failed: [Errno 5] Input/output error
+
+
+[2017-04-18 10:34:05] Traceback (most recent call last):
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 265, in open
+    self.fd = os.open(self.portstr, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+FileNotFoundError: [Errno 2] No such file or directory: '/dev/ttyACM0'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "index.py", line 68, in <module>
+    main()
+  File "index.py", line 50, in main
+    external = External()
+  File "index.py", line 21, in __init__
+    self.ser = SerialEcho(tty)
+  File "/home/mwestphall/ardupy/ardupy_gui/motor_text_gui/echo.py", line 13, in __init__
+    self.ser = serial.Serial(tty,timeout=3)
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialutil.py", line 240, in __init__
+    self.open()
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 268, in open
+    raise SerialException(msg.errno, "could not open port {}: {}".format(self._port, msg))
+serial.serialutil.SerialException: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+
+
+[2017-04-18 10:34:09] Traceback (most recent call last):
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 265, in open
+    self.fd = os.open(self.portstr, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+FileNotFoundError: [Errno 2] No such file or directory: '/dev/ttyACM0'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "index.py", line 68, in <module>
+    main()
+  File "index.py", line 50, in main
+    external = External()
+  File "index.py", line 21, in __init__
+    self.ser = SerialEcho(tty)
+  File "/home/mwestphall/ardupy/ardupy_gui/motor_text_gui/echo.py", line 13, in __init__
+    self.ser = serial.Serial(tty,timeout=3)
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialutil.py", line 240, in __init__
+    self.open()
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 268, in open
+    raise SerialException(msg.errno, "could not open port {}: {}".format(self._port, msg))
+serial.serialutil.SerialException: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+
+
+[2017-04-18 11:00:40] Traceback (most recent call last):
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 265, in open
+    self.fd = os.open(self.portstr, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+FileNotFoundError: [Errno 2] No such file or directory: '/dev/ttyACM0'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "index.py", line 48, in set_serial_port
+    self.ser = SerialEcho(tty)
+  File "/home/mwestphall/ardupy/ardupy_gui/motor_text_gui/echo.py", line 13, in __init__
+    self.ser = serial.Serial(tty,timeout=3)
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialutil.py", line 240, in __init__
+    self.open()
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 268, in open
+    raise SerialException(msg.errno, "could not open port {}: {}".format(self._port, msg))
+serial.serialutil.SerialException: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "index.py", line 88, in <module>
+    main()
+  File "index.py", line 70, in main
+    external = External()
+  File "index.py", line 23, in __init__
+    self.set_serial_port(tty)
+  File "index.py", line 50, in set_serial_port
+    except serial.util.SerialException:
+AttributeError: module 'serial' has no attribute 'util'
+
+
+[2017-04-18 11:01:03] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 43, in echo
+    js_callback.Call(self.ser.recieve_chars(),lambda:None)
+AttributeError: 'External' object has no attribute 'ser'
+
+
+[2017-04-18 11:10:20] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 50, in set_serial_port
+    self.ser = SerialEcho(tty)
+  File "/home/mwestphall/ardupy/ardupy_gui/motor_text_gui/echo.py", line 13, in __init__
+    self.ser = serial.Serial(tty,timeout=3)
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialutil.py", line 218, in __init__
+    self.port = port
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialutil.py", line 264, in port
+    raise ValueError('"port" must be None or a string, not {}'.format(type(port)))
+ValueError: "port" must be None or a string, not <class 'cefpython_py35.JavascriptCallback'>
+
+
+[2017-04-18 11:11:57] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 51, in set_serial_port
+    self.ser = SerialEcho(tty)
+  File "/home/mwestphall/ardupy/ardupy_gui/motor_text_gui/echo.py", line 13, in __init__
+    self.ser = serial.Serial(tty,timeout=3)
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialutil.py", line 218, in __init__
+    self.port = port
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialutil.py", line 264, in port
+    raise ValueError('"port" must be None or a string, not {}'.format(type(port)))
+ValueError: "port" must be None or a string, not <class 'cefpython_py35.JavascriptCallback'>
+
+
+[2017-04-18 11:24:59] Traceback (most recent call last):
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 534, in write
+    n = os.write(self.fd, d)
+OSError: [Errno 5] Input/output error
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 40, in send
+    self.ser.send_chars(substr,use_end)
+  File "/home/mwestphall/ardupy/ardupy_gui/motor_text_gui/echo.py", line 18, in send_chars
+    self.ser.write(chars.encode('ascii'))
+  File "/home/mwestphall/anaconda3/lib/python3.5/site-packages/serial/serialposix.py", line 565, in write
+    raise SerialException('write failed: {}'.format(v))
+serial.serialutil.SerialException: write failed: [Errno 5] Input/output error
+

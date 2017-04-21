@@ -7,6 +7,7 @@
 #include "TripleMotors.h"
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
+#define DELAY 2000 //wait 1 second before sending the next move instruction
 //declare motor shield and steppers
 // I can't for the life of me figure out how to declare these elsewhere
 Adafruit_MotorShield AFMS1 = Adafruit_MotorShield(0x60);
@@ -43,17 +44,26 @@ AccelStepper stepper1(forwardstep1, backwardstep1);
 AccelStepper stepper2(forwardstep2, backwardstep2);
 AccelStepper stepper3(forwardstep3, backwardstep3);
 TripleMotors motors(&stepper1,&stepper2,&stepper3);
-SerialInts si('\0',32);
+SerialInts si('\0',32,10000);
 
-bool hasSentCurrPos;
+bool hasSentCurrPos, readyToMove;
+int x, y;
+unsigned long curr_time;
+
+
 void setup() {
    //begin serial connection
    Serial.begin(9600);
-   Serial.println("Stepper test!");
+   Serial.println("Steppers Ready");
    AFMS1.begin();
    AFMS2.begin();
    motors.begin();
-   hasSentCurrPos = false;
+   TWBR = ((F_CPU /400000l) - 16) / 2;
+   hasSentCurrPos = true;
+   readyToMove = false;
+   x = 0;
+   y = 0;
+   curr_time = 0;
 
 }
 
@@ -69,12 +79,18 @@ void loop() {
       Serial.print(motors.getY());
 
     }
-    if((si.length()>0)&&(si.length()%2 == 0 )){
-      int x = si.getInt();
-      int y = si.getInt();
-      motors.moveToCoords(x, y);
+    if((si.length()>0)&&(si.length()%2 == 0 ) && !readyToMove){
+      x = si.getInt();
+      y = si.getInt();
+      curr_time = millis();
       hasSentCurrPos = false;
+      readyToMove = true;
+
     }
+  }
+  if(readyToMove && ((millis() - curr_time) > DELAY)){
+    motors.moveToCoords(x, y);
+    readyToMove = false;
   }
 
 }

@@ -14,9 +14,9 @@ class SerialEcho(object):
         self.null_zero = null_zero
         self.polling = False
 
-    def send_chars(self,chars):
+    def send_chars(self,chars,use_end=True):
         self.ser.write(chars.encode('ascii'))
-        if(self.null_zero):
+        if(use_end and self.null_zero):
             self.ser.write('\0'.encode('ascii'))
 
     def recieve_chars(self):

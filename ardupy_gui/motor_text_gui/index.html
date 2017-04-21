@@ -1,0 +1,117 @@
+<head>
+    <meta name="encoding" value="utf-8">
+    <script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed">
+        <div class="navbar-header">
+            <span class="navbar-brand" >Arduino Motor Controller</span>
+        </div>
+    </div >
+    <div class="container">
+        <div class="row" >
+            <div class = "col-sm-12">
+                <div class="row">
+                <h4>Input Test Mode:</h4>
+                </div>
+            </div>
+
+            <!--Connection/Port selection form group-->
+            <div class="col-sm-6 col-lg-4">
+                <form>
+                  <div class="form-group">
+
+                    <div class="row">
+                      <div class = "col-sm-12"><label for="">Arduino Port:</label></div>
+                      <div class="col-9 col-sm-7 col-md-8">
+                          <select class="form-control" id="tty">
+                          </select>
+                      </div>
+                      <div class="col-3 col-sm-5 col-md-4 text-right">
+                          <button id="scan" type="button" class="btn btn-primary">Rescan</button>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class = "col-sm-12"><label for="">Baud Rate:</label></div>
+                      <div class="col-sm-12">
+                        <input type="text" class="form-control" placeholder="9600" id="baud">
+                      </div>
+                    </div>
+
+                    <div class="row" style="margin-top:10px">
+                      <div class="col-sm-12">
+                          <p>Connected to:</p>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+            </div>
+
+            <!--Path sending/delay setting form group-->
+            <div class="col-sm-6 col-lg-4">
+              <form>
+                <div class="form-group">
+                  <div class="row">
+                    <div class = "col-sm-12"><label for="">Coordinate List:</label>
+                      <input type="text" class="form-control" placeholder="800,800 0,0 800,800 ..." id="instr">
+                    </div>
+                    <div class="col-sm-12">
+                    <button id="send" type="button" class="btn btn-primary">Send Coordinates</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class = "col-sm-12"><label for="">Delay Between Moves (ms):</label>
+                      <input type="text" class="form-control" placeholder="1000" id="instr">
+                    </div>
+                    <div class="col-sm-12">
+                    <button id="set_delay" type="button" class="btn btn-primary">Set Delay</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!--Manual control group-->
+            <div class="col-sm-6 col-lg-4">
+                <form>
+                  <div class="form-group">
+
+                    <div class="row">
+                      <div class = "col-sm-12"><label for="">Manual Step:</label></div>
+                      <div class="col-sm-12">
+                        <input type="text" class="form-control" placeholder="50" id="step">
+                      </div>
+                    </div>
+                    <div class="row" style="margin-top:5px">
+                      <div class="col-12 text-center">
+                          <button id="up" type="button" class="btn btn-primary keybtn">+X</button>
+                      </div>
+                    </div>
+                    <div class="row">
+                     <div class="col-12 text-center">
+                      <div class="btn-group">
+                          <button id="left" type="button" class="btn btn-primary keybtn">-Y</button>
+                          <button id="dn" type="button" class="btn btn-primary keybtn">-X</button>
+                          <button id="right" type="button" class="btn btn-primary keybtn">+Y</button>
+                      </div>
+                     </div>
+                    </div>
+                  </div>
+                </form>
+            </div>
+
+            <!--Output Stream -->
+            <div class="col-sm-6 col-lg-12">
+              <div class="form-group">
+                  <label for="formGroupExampleInput2">Output Stream:</label>
+                  <textarea class="form-control" rows="12" id="outdiv"></textarea>
+              </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/index.js"></script>
+</body>

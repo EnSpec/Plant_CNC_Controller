@@ -1,5 +1,6 @@
 #include"TripleMotors.h"
-
+#define XSPEED 200
+#define XACCELL 50
 // define accelstepper objects with the step functions
 
 TripleMotors::TripleMotors(AccelStepper * s1, AccelStepper * s2, AccelStepper * s3){
@@ -13,14 +14,14 @@ void TripleMotors::begin(){
 
   //set speed, acceleration, amount to move for both accelsteppers
   //1 and 2 must be the same
-  stepper1->setSpeed(600.0);
-  stepper1->setAcceleration(900.0);
+  stepper1->setSpeed(XSPEED);
+  stepper1->setAcceleration(XACCELL);
 
-  stepper2->setSpeed(600.0);
-  stepper2->setAcceleration(90.0);
+  stepper2->setSpeed(XSPEED);
+  stepper2->setAcceleration(XACCELL);
 
   stepper3->setSpeed(100.0);
-  stepper3->setAcceleration(500.0);
+  stepper3->setAcceleration(10.0);
 
 }
 void TripleMotors::run(){
@@ -52,5 +53,6 @@ void TripleMotors::moveToCoords(int x, int y){
 
 
 int TripleMotors::nRunning(){
-  return(stepper1->distanceToGo() != 0) + (stepper3->distanceToGo() != 0);
+  return(stepper1->distanceToGo() != 0) + (stepper2->distanceToGo() != 0)
+                 + (stepper3->distanceToGo() != 0);
 }
