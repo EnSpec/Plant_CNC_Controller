@@ -1,7 +1,9 @@
 body{
     background-color: lightgray;
 }
-
+#up{
+    border-radius: 0.25em 0.25em 0 0;
+}
 .navbar{
     background-color: #b3b3b3;
     margin-bottom:10px;

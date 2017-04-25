@@ -66,8 +66,9 @@ void SerialInts::clear(){
   _curr_int = 0;
 }
 void SerialInts::demo(){
-  int example_length = 8;
-  int example_values[] = {800,0, 0,0, 800,0, 0,0};
+  int example_length = 15;
+  int example_values[] = {1,800,0, /**/ 1,0,0, /**/ 2,0,0,/**/ 1,800,0, /**/ 1,0,0};
+  //int example_values[] = {3,200,0, /**/ 3,200,0, /**/ 3,200,0, /**/ 3,200,0, /**/ 3,200,0};
   int i;
   for(i = 0; i < example_length; _values.push(example_values[i++]));
 }

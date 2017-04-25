@@ -44,7 +44,7 @@
 
                     <div class="row" style="margin-top:10px">
                       <div class="col-sm-12">
-                          <p>Connected to:</p>
+                          <p id="connected">Connected to:</p>
                       </div>
                     </div>
                   </div>
@@ -57,7 +57,7 @@
                 <div class="form-group">
                   <div class="row">
                     <div class = "col-sm-12"><label for="">Coordinate List:</label>
-                      <input type="text" class="form-control" placeholder="800,800 0,0 800,800 ..." id="instr">
+                      <input type="text" class="form-control" placeholder="800,0 0,0 800,0 0,0" id="instr">
                     </div>
                     <div class="col-sm-12">
                     <button id="send" type="button" class="btn btn-primary">Send Coordinates</button>
@@ -65,7 +65,7 @@
                   </div>
                   <div class="row">
                     <div class = "col-sm-12"><label for="">Delay Between Moves (ms):</label>
-                      <input type="text" class="form-control" placeholder="1000" id="instr">
+                      <input type="text" class="form-control" placeholder="1000" id="delay_val">
                     </div>
                     <div class="col-sm-12">
                     <button id="set_delay" type="button" class="btn btn-primary">Set Delay</button>
@@ -94,8 +94,8 @@
                     <div class="row">
                      <div class="col-12 text-center">
                       <div class="btn-group">
-                          <button id="left" type="button" class="btn btn-primary keybtn">-Y</button>
-                          <button id="dn" type="button" class="btn btn-primary keybtn">-X</button>
+                          <button id="left" type="button" class="btn btn-primary keybtn">- Y</button>
+                          <button id="dn" type="button" class="btn btn-primary keybtn">- X</button>
                           <button id="right" type="button" class="btn btn-primary keybtn">+Y</button>
                       </div>
                      </div>
@@ -108,7 +108,7 @@
             <div class="col-sm-6 col-lg-12">
               <div class="form-group">
                   <label for="formGroupExampleInput2">Output Stream:</label>
-                  <textarea class="form-control" rows="12" id="outdiv"></textarea>
+                  <textarea class="form-control" rows="8" id="outdiv"></textarea>
               </div>
             </div>
         </div>

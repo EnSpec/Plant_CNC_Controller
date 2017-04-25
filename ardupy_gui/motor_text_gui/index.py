@@ -24,20 +24,30 @@ class External(object):
         self.ser = None
         self.err_callback = None
 
-    def parse_coords(self,coord_string):
-        return sum([[item for item in pair.split(',')]
-            for pair in coord_string.split()],[])
+    def send_coords(self,string,mode=1,use_end=True):
+        """Appends 1, to each set of target_x,target_y coords in string
+        then sends it to arduino using self.send
+        mode determines movement type:
+        1 - absolute target
+        3 - relative target
+        """
+        self.send('%d,'%mode+(' %d,'%mode).join(string.split()),use_end)
+
+    def send_delay(self,string,use_end=True):
+        """Formulates a change-delay request from a single delay_ms value,
+        then sends it to arduino using self.send
+        """
+        self.send('2,%s,0'%string,use_end)
 
     def send(self,string,use_end=True):
-        """send a character string to the arduino via serial,
-        then read all characters off the arduino's buffer
+        """send a comma-separated string of values to the arduino via serial
         """
         if self.ser is None:
             if len(string) > 1:
                 self.raise_serial_err("Not currently connected to an Arduino")
             return
 
-        int_strings = self.parse_coords(string)
+        int_strings = string.replace(',',' ').split()
         try:
             for substr in int_strings:
                 self.ser.send_chars(substr,use_end)
@@ -92,6 +102,7 @@ def main():
     bindings.SetObject("external",external)
     bindings.SetProperty("KEY_CODES",External.KEY_CODES)
     browser.SetJavascriptBindings(bindings)
+    #enter main loop
     cef.MessageLoop()
     cef.Shutdown()
 
