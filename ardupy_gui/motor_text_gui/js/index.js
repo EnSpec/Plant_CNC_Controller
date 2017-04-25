@@ -1,28 +1,29 @@
 /* Script for index.html, contains functions that pass form data into
  * Python controller, which then parses it into serial data for arduino
  */
-val_or_placeholder = function(elem){
+var val_or_placeholder = function(elem){
     return elem.val() || elem.attr('placeholder');
-}
+};
+var write_to_out = function(py_text,py_callback){
+    if(py_text != KEY_CODES.EMPTY_BUFFSTR){
+        $('#outdiv').html($('#outdiv').html()+py_text+'\n');
+        //might eventually stop working
+            if(!$('#outdiv').is(':focus'))
+                $('#outdiv').scrollTop(9999999);
+    }
+};
 $(document).ready(function(){
     setInterval(function(){
         //send a no-op byte to the arduino so SerialInts knows it's connected
         external.send('n',false)
         //poll the arduino's serial port for a response once every .5 seconds
         //TODO: Move this to the python module - it will be a lot of work
-        external.echo(function(py_text,py_callback){
-            if(py_text != KEY_CODES.EMPTY_BUFFSTR){
-                $('#outdiv').html($('#outdiv').html()+py_text+'\n');
-                //might eventually stop working
-                    if(!$('#outdiv').is(':focus'))
-                        $('#outdiv').scrollTop(9999999);
-            }
-        });
+        external.echo(write_to_out);
     },500);
 
-    external.set_serial_err(function(err_msg,py_callback){
-        alert(err_msg);
-    });
+    external.set_serial_err(_.throttle(function(err_msg,py_callback){
+        write_to_out('ERROR: ' + err_msg);
+    },3000));
 
     $('#tty').change(function(){
         external.set_serial_port($(this).val());
@@ -55,6 +56,8 @@ $(document).ready(function(){
     //$('#left').click(function(){ external.send_coords('0,-200',3); });
     //$('#right').click(function(){ external.send_coords('0,200',3); });
     $(window).keydown(function(event){
+        //don't trigger key-based controls if the user is typing
+        if($('[type=text], textarea').is(':focus'))return;
         switch(event.key){
             case "ArrowUp":
                 $('#up').addClass('active').trigger('click');

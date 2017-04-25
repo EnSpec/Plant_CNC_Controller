@@ -2,8 +2,10 @@
     <meta name="encoding" value="utf-8">
     <script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/underscore-min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="css/style.css" rel="stylesheet" type="text/css">
+    <title>Ardupy Motor Controller</title>
 </head>
 <body>
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
@@ -64,20 +66,34 @@
               <form>
                 <div class="form-group">
                   <div class="row">
-                    <div class = "col-sm-12"><label for="">Coordinate List:</label>
+                    <div class = "col-sm-12">
+                        <label for="">Coordinate List:</label>
+                    </div>
+                    <div class="col-9 col-sm-7 col-md-9">
                       <input type="text" class="form-control" placeholder="800,0 0,0 800,0 0,0" id="instr">
                     </div>
-                    <div class="col-sm-12">
-                    <button id="send" type="button" class="btn btn-primary">Send Coordinates</button>
+                    <div class="col-3 col-sm-5 col-md-3 text-right">
+                      <button id="send" type="button" class="btn btn-primary">Send</button>
                     </div>
                   </div>
                   <div class="row">
-                    <div class = "col-sm-12"><label for="">Delay Between Moves (ms):</label>
+                    <div class = "col-sm-12">
+                      <label for="">Delay Between Moves (ms):</label>
+                    </div>
+                    <div class="col-9 col-sm-7 col-md-9">
                       <input type="text" class="form-control" placeholder="1000" id="delay_val">
                     </div>
-                    <div class="col-sm-12">
-                    <button id="set_delay" type="button" class="btn btn-primary">Set Delay</button>
+                    <div class="col-3 col-sm-5 col-md-3 text-right">
+                      <button id="set_delay" type="button" class="btn btn-primary">Set</button>
                     </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4 col-sm-3 col-md-3">
+                      <button id="stop_path" type="button" class="btn btn-primary">Stop</button>
+                    </div> 
+                    <div class="col-5 col-sm-4 col-md-6 text-right">
+                      <button id="go_back" type="button" class="btn btn-primary btn-block">Go to 0,0</button>
+                    </div> 
                   </div>
                 </div>
               </form>
