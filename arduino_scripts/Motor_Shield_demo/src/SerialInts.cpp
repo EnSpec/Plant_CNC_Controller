@@ -63,7 +63,10 @@ int SerialInts::getInt(){
   return _values.pop();
 }
 void SerialInts::clear(){
-  _curr_int = 0;
+  //empty queue of stored values
+  while(_values.count()) _values.pop();
+  //reset _char_code
+  _char_code = '\0';
 }
 void SerialInts::demo(){
   int example_length = 15;

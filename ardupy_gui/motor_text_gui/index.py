@@ -93,7 +93,10 @@ def main():
     
     cef.Initialize()
     #set up a browser
-    browser = cef.CreateBrowserSync(window_title="Hello World!", url=url)
+    window_info = cef.WindowInfo()
+    window_info.SetAsChild(0, [0,0,1000,600])
+    browser = cef.CreateBrowserSync(window_title="Hello World!", url=url,
+            window_info=window_info)
     frame = browser.GetMainFrame()
     #set up the browser's javascript bindings
     external = External()

@@ -1,1 +1,1 @@
-/home/mwestphall/ardupy/echo.py
+../../echo.py

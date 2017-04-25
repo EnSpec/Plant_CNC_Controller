@@ -13,8 +13,21 @@ TripleMotors motors(&stepper1,&stepper2,&stepper3);
 SerialInts si('\0',32,10000);
 
 bool hasSentCurrPos, readyForNextAction, waitingOnInstruction;
-int x, y, target;
+int x, y;
 unsigned long curr_time,delay_ms;
+/* Target deterines the target action for the Motorcontroller
+ * Negative targets are used internally, while positive targets can be sent
+ * by the user.
+ * Currently reserved targets:
+ * 0 - no action pending
+ * 1 - Set target for move after delay
+ *   -2 - Waiting until delay is over to move
+ *   -1 - Moving after delay
+ * 2 - Set delay between moves
+ * 3 - Move relative to current position without delay
+ * -3 - Slow down and stop
+ */
+int target;
 
 
 void setup() {
@@ -47,24 +60,30 @@ void finish_movement_target(){
     readyForNextAction = true;
   }
 }
+
+void halt_motors(){
+  si.clear();
+  motors.stop();
+}
 void set_delay(){
   delay_ms = (unsigned long)si.getInt();
   si.getInt();
   Serial.print(" Delay set to ");
   Serial.print(delay_ms);
   readyForNextAction = true;
+  target=0;
 }
 
 void set_incremental_movement_target(){
   //move a small amount instantly
-  Serial.print("I'm incrementing!");
-  x = si.getInt()+motors.getX();
-  y = si.getInt()+motors.getY();
-  //curr_time = millis() - delay_ms;
-  motors.moveToCoords(x, y);
+  x = si.getInt();
+  y = si.getInt();
+  motors.moveToRelativeCoords(x, y);
   hasSentCurrPos = false;
   readyForNextAction = true;
+  target=0;
 }
+
 void loop() {
   motors.run();
   si.scan();

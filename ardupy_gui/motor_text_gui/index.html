@@ -6,16 +6,24 @@
     <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <div class="navbar navbar-default navbar-fixed">
-        <div class="navbar-header">
-            <span class="navbar-brand" >Arduino Motor Controller</span>
-        </div>
-    </div >
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+      <a class="navbar-brand" href="#">Motor Controller</a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Control Panel</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Route Plotter</a>
+          </li>
+        </ul>
+      </div>
+    </nav>    
     <div class="container">
         <div class="row" >
             <div class = "col-sm-12">
                 <div class="row">
-                <h4>Input Test Mode:</h4>
+                <h4>Control Panel:</h4>
                 </div>
             </div>
 
@@ -79,14 +87,11 @@
             <div class="col-sm-6 col-lg-4">
                 <form>
                   <div class="form-group">
-
-                    <div class="row">
-                      <div class = "col-sm-12"><label for="">Manual Step:</label></div>
-                      <div class="col-sm-12">
-                        <input type="text" class="form-control" placeholder="50" id="step">
-                      </div>
-                    </div>
                     <div class="row" style="margin-top:5px">
+                      <div class = "col-sm-12">
+                          <label for="">Manual Step:</label>
+                          <p>(Use buttons or arrow keys)</p>
+                      </div>
                       <div class="col-12 text-center">
                           <button id="up" type="button" class="btn btn-primary keybtn">+X</button>
                       </div>

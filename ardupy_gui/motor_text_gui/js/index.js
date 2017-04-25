@@ -50,9 +50,10 @@ $(document).ready(function(){
         external.send_delay(val_or_placeholder($('#delay_val')));
     });
 
-    $('#up').click(function(){
-        external.send_coords('200,0',3);
-    });
+    $('#up').click(function(){ external.send_coords('200,0',3); });
+    $('#dn').click(function(){ external.send_coords('-200,0',3); });
+    //$('#left').click(function(){ external.send_coords('0,-200',3); });
+    //$('#right').click(function(){ external.send_coords('0,200',3); });
     $(window).keydown(function(event){
         switch(event.key){
             case "ArrowUp":

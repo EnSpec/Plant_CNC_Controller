@@ -20,8 +20,8 @@ void TripleMotors::begin(){
   stepper2->setSpeed(XSPEED);
   stepper2->setAcceleration(XACCELL);
 
-  stepper3->setSpeed(100.0);
-  stepper3->setAcceleration(10.0);
+  stepper3->setSpeed(XSPEED);
+  stepper3->setAcceleration(XACCELL);
 
 }
 void TripleMotors::run(){
@@ -46,9 +46,22 @@ int TripleMotors::getX(){
 int TripleMotors::getY(){
   return stepper3->currentPosition();
 }
+
+void TripleMotors::stop(){
+  //get sign of current movement direction
+  int x_sign = (stepper1->distanceToGo() > 0) - (stepper1->distanceToGo() < 0);
+  int y_sign = (stepper3->distanceToGo() > 0) - (stepper3->distanceToGo() < 0);
+  //complete 1 full rotation in the correct direction then stop
+  moveToRelativeCoords(x_sign*200, y_sign*200);
+}
 void TripleMotors::moveToCoords(int x, int y){
   moveToX(x);
   moveToY(y);
+}
+
+void TripleMotors::moveToRelativeCoords(int x, int y){
+  moveToX(getX()+x);
+  moveToY(getY()+y);
 }
 
 

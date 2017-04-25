@@ -13,12 +13,14 @@ class TripleMotors{
     TripleMotors(AccelStepper * s1, AccelStepper * s2, AccelStepper * s3);
     void begin();
     void run();
+    void stop();
     int nRunning();
     void moveToX(int xt);
     void moveToY(int yt);
     int getX();
     int getY();
     void moveToCoords(int x, int y);
+    void moveToRelativeCoords(int x, int y);
   private:
     AccelStepper * stepper1;
     AccelStepper * stepper2;
