@@ -13,12 +13,12 @@ body{
 .wait{
     height:1.3em;
     width:3em;
-    font-family:'Courier New';
+    font-family:'monospace';
 }
 .coord{
     height:1.3em;
     width:7em;
-    font-family:'Courier New';
+    font-family:'monospace';
 }
 .path_node{
     background-color: #b3b3b3;
