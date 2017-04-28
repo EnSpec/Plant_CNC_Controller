@@ -20,6 +20,7 @@ body{
     width:7em;
     font-family:'monospace';
 }
+
 .path_node{
     background-color: #b3b3b3;
     border-radius:3px;
