@@ -4,6 +4,7 @@ body{
 #up{
     border-radius: 0.25em 0.25em 0 0;
 }
+
 .navbar{
     background-color: #b3b3b3;
     margin-bottom:10px;
@@ -21,6 +22,11 @@ body{
     font-family:'monospace';
 }
 
+#path_nodes{
+    list-style:none;
+    padding-left:15px;
+}
+
 .path_node{
     background-color: #b3b3b3;
     border-radius:3px;
@@ -28,24 +34,26 @@ body{
     position:relative;
     user-select:none;
 }
-#path_nodes{
-    list-style:none;
-    padding-left:15px;
+.path_node:hover{
+    cursor:-webkit-grab;
 }
-.node_close{
+.path_node span:active{
+    cursor:-webkit-grabbing;
+}
+.node_opts{
     position:absolute;
     right: 5px;
     top: 0;
     color: #555;
 }
 
-.node_close:hover{
+.node-click:hover{
     color:#222;
     text-decoration:none;
     cursor:pointer;
 }
 
-.node_close:focus{
+.node-click:focus{
     color:#222;
     text-decoration:none;
 }

@@ -78,10 +78,12 @@ $(document).ready(function(){
     });
     
     $('[href="route_plot.html"]').click(function(){
+    });
+    
+    $(window).bind("beforeunload", function(){
         save_forms();
         save_textareas();
     });
-    
     restore_forms(); 
     restore_textareas();
 
