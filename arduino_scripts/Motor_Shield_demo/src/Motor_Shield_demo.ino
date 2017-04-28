@@ -8,7 +8,7 @@
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 //this includes a bunch of setup code for the motors & defines 3 AccelSteppers
 #include "MotorShieldSetup.h"
-
+#include "TargetValues.h"
 TripleMotors motors(&stepper1,&stepper2,&stepper3);
 SerialInts si('\0',32,10000);
 
@@ -42,21 +42,29 @@ void setup() {
    readyForNextAction = true;
    x = 0;
    y = 0;
-   target = 0;
+   target = ACTION_COMPLETE;
    curr_time = 0;
    delay_ms = 2000;
 }
+
 void set_movement_target(){
   x = si.getInt();
   y = si.getInt();
   curr_time = millis();
-  hasSentCurrPos = false;
-  target=-2;
+  target = WAITING_TO_MOVE;
+}
+
+void move_if_ready(){
+    if(((millis() - curr_time) > delay_ms)){
+      motors.moveToCoords(x, y);
+      hasSentCurrPos = false;
+      target= MOVING;
+    }
 }
 
 void finish_movement_target(){
   if(motors.nRunning() == 0){
-    target = 0;
+    target = ACTION_COMPLETE;
     readyForNextAction = true;
   }
 }
@@ -71,7 +79,7 @@ void set_delay(){
   Serial.print(" Delay set to ");
   Serial.print(delay_ms);
   readyForNextAction = true;
-  target=0;
+  target = ACTION_COMPLETE;
 }
 
 void set_incremental_movement_target(){
@@ -81,21 +89,25 @@ void set_incremental_movement_target(){
   motors.moveToRelativeCoords(x, y);
   hasSentCurrPos = false;
   readyForNextAction = true;
-  target=0;
+  target = ACTION_COMPLETE;
 }
 
 void loop() {
+
+  //Step the motors if they need to be steppd, and read a character if there's
+  //one to be read
   motors.run();
   si.scan();
 
-  if((si.length()>0)&&(si.length()%3 == 0 ) && readyForNextAction){
+  if((si.length()>0)&&(si.length()%3 == 0) && readyForNextAction){
     target = si.getInt();
     readyForNextAction = false;
   }
-
-  if(target == 2) set_delay();
-  if(target == 3) set_incremental_movement_target();
-  if(target == -1) finish_movement_target();
+  if(si.getCharCode() == 's') halt_motors();
+  if(target == SET_DELAY) set_delay();
+  if(target == MOVE_RELATIVE) set_incremental_movement_target();
+  if(target == MOVING) finish_movement_target();
+  if(target == WAITING_TO_MOVE) move_if_ready();
   if((motors.nRunning() == 0)){
     if(hasSentCurrPos == false){
       hasSentCurrPos = true;
@@ -104,12 +116,7 @@ void loop() {
       Serial.print(", ");
       Serial.print(motors.getY());
     }
-    if(target == 1) set_movement_target();
-  }
-
-  if(((millis() - curr_time) > delay_ms) && target == -2){
-    motors.moveToCoords(x, y);
-    target= -1;
+    if(target == SET_MOVEMENT_TARGET) set_movement_target();
   }
 
 }

@@ -9,3 +9,42 @@ body{
     margin-bottom:10px;
     border-bottom: 1px solid #999999;
 }
+
+.wait{
+    height:1.3em;
+    width:3em;
+    font-family:'Courier New';
+}
+.coord{
+    height:1.3em;
+    width:7em;
+    font-family:'Courier New';
+}
+.path_node{
+    background-color: #b3b3b3;
+    border-radius:3px;
+    margin-bottom:5px;
+    position:relative;
+    user-select:none;
+}
+#path_nodes{
+    list-style:none;
+    padding-left:15px;
+}
+.node_close{
+    position:absolute;
+    right: 5px;
+    top: 0;
+    color: #555;
+}
+
+.node_close:hover{
+    color:#222;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.node_close:focus{
+    color:#222;
+    text-decoration:none;
+}

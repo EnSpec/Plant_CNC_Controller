@@ -23,6 +23,7 @@ class External(object):
     def __init__(self,tty='/dev/ttyACM0'):
         self.ser = None
         self.err_callback = None
+        self.saved_states = dict()
 
     def send_coords(self,string,mode=1,use_end=True):
         """Appends 1, to each set of target_x,target_y coords in string
@@ -58,10 +59,22 @@ class External(object):
     def echo(self,js_callback):
         try:
             js_callback.Call(self.ser.recieve_chars(),External.noop)
-        except serial.serialutil.SerialException as e:
-            self.raise_serial_err(e)
         except AttributeError as e:
-            pass
+            return
+        except Exception as e:
+            self.raise_serial_err(e)
+
+    
+    def show_saved(self):
+        print("My saved stuff:")
+        print(self.saved_states)
+
+    def save_state(self,js_key,js_val):
+        self.saved_states[js_key] = js_val
+
+
+    def restore_state(self, key, js_callback):
+        js_callback.Call(self.saved_states.get(key,''),External.noop)
 
     def set_serial_err(self,js_callback):
         self.err_callback = js_callback

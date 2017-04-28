@@ -19,6 +19,8 @@ class TripleMotors{
     void moveToY(int yt);
     int getX();
     int getY();
+    float getXspeed();
+    float getYspeed();
     void moveToCoords(int x, int y);
     void moveToRelativeCoords(int x, int y);
   private:

@@ -14,13 +14,13 @@ void TripleMotors::begin(){
 
   //set speed, acceleration, amount to move for both accelsteppers
   //1 and 2 must be the same
-  stepper1->setSpeed(XSPEED);
+  stepper1->setMaxSpeed(XSPEED);
   stepper1->setAcceleration(XACCELL);
 
-  stepper2->setSpeed(XSPEED);
+  stepper2->setMaxSpeed(XSPEED);
   stepper2->setAcceleration(XACCELL);
 
-  stepper3->setSpeed(XSPEED);
+  stepper3->setMaxSpeed(XSPEED);
   stepper3->setAcceleration(XACCELL);
 
 }
@@ -47,12 +47,18 @@ int TripleMotors::getY(){
   return stepper3->currentPosition();
 }
 
+float TripleMotors::getXspeed(){
+  return stepper1->speed();
+}
+
+float TripleMotors::getYspeed(){
+  return stepper3->speed();
+}
+
 void TripleMotors::stop(){
-  //get sign of current movement direction
-  int x_sign = (stepper1->distanceToGo() > 0) - (stepper1->distanceToGo() < 0);
-  int y_sign = (stepper3->distanceToGo() > 0) - (stepper3->distanceToGo() < 0);
   //complete 1 full rotation in the correct direction then stop
-  moveToRelativeCoords(x_sign*200, y_sign*200);
+  moveToRelativeCoords((int)(2*getXspeed()),
+                       (int)(2*getYspeed()));
 }
 void TripleMotors::moveToCoords(int x, int y){
   moveToX(x);

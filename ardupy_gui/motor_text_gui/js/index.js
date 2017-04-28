@@ -15,20 +15,26 @@ var write_to_out = function(py_text,py_callback){
 $(document).ready(function(){
     setInterval(function(){
         //send a no-op byte to the arduino so SerialInts knows it's connected
-        external.send('n',false)
+        if(document.hasFocus()) external.send('n',false);
         //poll the arduino's serial port for a response once every .5 seconds
         //TODO: Move this to the python module - it will be a lot of work
         external.echo(write_to_out);
     },500);
 
     external.set_serial_err(_.throttle(function(err_msg,py_callback){
+        //assume that the error comes from a disconnect
+        //TODO make this more intelligent
+        $('#connected').html('Connected to: None');
         write_to_out('ERROR: ' + err_msg);
     },3000));
 
     $('#tty').change(function(){
         external.set_serial_port($(this).val());
+        $('#connected').html('Connected to: '+($(this).val()||'None'));
     });
 
+
+    //Set up 'Scan' button to scan devices that probably match an Arduino
     $('#scan').click(function(){
         external.get_tty_options(function(py_data){
             $('#tty>option').each(function(){$(this).remove()});
@@ -36,20 +42,48 @@ $(document).ready(function(){
                 $('#tty').append('<option>'+py_data[item]+'</option>');
             }
         });
-        $('#tty').trigger('change'); 
     });
-
-
     $('#scan').trigger('click');
     setTimeout(function(){$('#tty').trigger('change');},500); 
 
+    
+    //Clicking 'Send' or pressing enter in form send a series of coordinates
     $('#send').click(function(){
         external.send_coords(val_or_placeholder($('#instr')));
     });
+    $('#instr').keydown(function(event){
+        if(event.keyCode == 13) $('#send').trigger('click');
+    });
 
+
+    //Clicking 'Set Delay' or pressing enter in form sets delay
     $('#set_delay').click(function(){
         external.send_delay(val_or_placeholder($('#delay_val')));
     });
+    $('#delay_val').keydown(function(event){
+        if(event.keyCode == 13) $('#set_delay').trigger('click');
+    });
+    
+    $('#stop').click(function(){
+        external.send('s',false);
+    });
+
+    $('#go_home').click(function(){
+        $('#stop').trigger('click');
+        setTimeout(function(){external.send_coords('0,0');},100);
+    });
+    
+    $('#clear_out').click(function(){
+        $('#outdiv').html('');
+    });
+    
+    $('[href="route_plot.html"]').click(function(){
+        save_forms();
+        save_textareas();
+    });
+    
+    restore_forms(); 
+    restore_textareas();
 
     $('#up').click(function(){ external.send_coords('200,0',3); });
     $('#dn').click(function(){ external.send_coords('-200,0',3); });
