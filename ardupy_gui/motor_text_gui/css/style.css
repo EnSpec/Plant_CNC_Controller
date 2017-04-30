@@ -40,6 +40,38 @@ body{
 .path_node span:active{
     cursor:-webkit-grabbing;
 }
+
+#canvas-border{
+    width:100%;
+}
+#path_plot{
+    width:100%;
+    margin-bottom:5px;
+    background-image:url(../grid.svg);
+    background-size:cover;
+    border-bottom:1px solid black;
+    /*
+    border-right: 2px solid #b3b3b3;
+    border-bottom: 2px solid #b3b3b3;
+    */
+}
+
+@media(max-width:991px){
+    .lg-spacer{
+        display:none;
+    }
+    #canvas-border{
+        width:125%;
+    }
+}
+@media(max-width:811px){
+    .lg-spacer{
+        display:none;
+    }
+    #canvas-border{
+        width:100%;
+    }
+}
 .node_opts{
     position:absolute;
     right: 5px;

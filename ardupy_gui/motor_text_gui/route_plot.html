@@ -26,13 +26,13 @@
     </nav>    
     <div class="container">
         <div class="row" >
-            <div class = "col-sm-12">
-                <div class="row">
-                <h4>Route Plotter:</h4>
-                </div>
-            </div>
             <!--Path node widgets-->
             <div class="col-sm-12 col-md-6 col-lg-5">
+              <div class = "col-sm-12">
+                <div class="row">
+                  <h4>Route Plotter:</h4>
+                  </div>
+              </div>
               <div class="row">
                   <div class="col-7 col-md-6">
                     <span>Destination Points:</span>
@@ -41,7 +41,7 @@
                       <button id="add_node"  type="button" class="btn btn-primary btn-sm">Add <b>+</b></button>
                       <button id="clear_nodes"  type="button" class="btn btn-Danger btn-sm">Clear&#10006;</button>
                   </div>
-                  <div class="col-12" id="no_nodes" >
+                  <div class="col-12" id="no_nodes">
                       <p>Click "Add" to add a destination</p>
                   </div>
               </div>
@@ -49,16 +49,24 @@
                   <!-- Path node 0-->
               </ul> 
 
-              <!--button prompting user for more-->
-              <div class="row"> 
-                
-              </div>
+            </div>
+            <div class="col-lg-1 lg-spacer">
             </div>
             <!--Plot of path-->
-            <div class="col-sm-12 col-md-6 col-lg-7">
+            <div class="col-sm-12 col-md-6">
+              <div class="col-12">
+                <span>Plot of Route:</span>
+              </div>
+              <div class="col-12">
+                <div id="canvas-border">
+                  <svg id="path_plot" xmlns="http://www.w3.org/2000/svg" viewbox="-70 -86 800 1000">
+                  </svg>
+                </div>
+              </div>
             </div>
         </div>
     </div>
     <script type="text/javascript" src="js/maintain_state.js"></script>
+    <script type="text/javascript" src="js/route_plot_canvas.js"></script>
     <script type="text/javascript" src="js/route_plot.js"></script>
 </body>

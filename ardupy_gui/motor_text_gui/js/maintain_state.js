@@ -34,9 +34,9 @@ var restore_nodes = function(callback){
         _.each(saved_nodes,function(node,i){
             if(i%2==0){
                 callback();
-                $('.coord').last().val(node).trigger('focusout');
+                $('.coord').last().val(node).trigger('change');
             } else {
-                $('.wait').last().val(node).trigger('focusout');
+                $('.wait').last().val(node).trigger('change');
             }
         });
     });

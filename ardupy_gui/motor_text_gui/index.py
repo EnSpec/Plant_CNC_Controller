@@ -107,7 +107,7 @@ def main():
     cef.Initialize()
     #set up a browser
     window_info = cef.WindowInfo()
-    window_info.SetAsChild(0, [0,0,1000,600])
+    window_info.SetAsChild(0, [0,0,1000,650])
     browser = cef.CreateBrowserSync(window_title="Hello World!", url=url,
             window_info=window_info)
     frame = browser.GetMainFrame()

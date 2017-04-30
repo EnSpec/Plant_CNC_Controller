@@ -15,6 +15,7 @@ var update_nodenumbers = function(){
             count++;
         });
     }
+    draw_path();
 };
 
 var coord_keydown = function(event){
@@ -50,18 +51,19 @@ var form_verify = function(form,regex){
         form.addClass('alert-danger');
     }
 };
+
 var append_node = function(idx){
     $('#no_nodes').hide();
     var n_nodes = $('.path_node').length+1;
     var coord_id = "coord_"+n_nodes;
     var wait_id = "wait_"+n_nodes;
-    var new_node = `<li class="col-12 path_node" num=${n_nodes}>
+    var new_node = $(`<li class="col-12 path_node" num=${n_nodes}>
           <div class="row">
             <div class="col-12">
                 <span>
                 <span class="node_num">${n_nodes}.</span>
                 Go to <input class="coord" id=${coord_id} placeholder="     ," type="text">,
-                wait <input class="wait" id=${wait_id} type="text">s
+                wait <input class="wait" id=${wait_id} placeholder="0" type="text">s
                 </span>
 
                 <span class='node_opts'>
@@ -70,7 +72,7 @@ var append_node = function(idx){
                 </span>
             </div>
            </div>
-          </li>`;
+          </li>`);
 
     if(idx == undefined){
         $('#path_nodes').append(new_node);
@@ -88,25 +90,35 @@ var append_node = function(idx){
     
     $('.node_add').click(function(){
         append_node($(this).closest('.path_node'));
-        update_nodenumbers();
     });
 
     //unbind previous function attachments so that things are
     //only called once
-    $('.coord, .wait').unbind('keydown').unbind('focusout');
+    $('.coord, .wait').unbind('keydown').unbind('change');
 
     $('.coord').keydown(coord_keydown);
-    $('.coord').focusout(function(){form_verify($(this),/^\s*,*[0-9]+[,|\s]+[0-9]+\s*,*$/)});
+    $('.coord').change(function(){
+        form_verify($(this),/^[\s*,*[0-9]+[,|\s]+[0-9]+\s*,*]?$/);
+        draw_path();
+    });
     $('.wait').keydown(wait_keydown);
-    $('.wait').focusout(function(){form_verify($(this),/^\s*,*[0-9]+\s*,*$/)});
- 
-    //focus the first empty coord
-    $($('.coord').get().reverse()).each(function(){
-        if(!$(this).val()){
-            $(this).focus();
-        }
-    }); 
+    $('.wait').change(function(){
+        form_verify($(this),/^[\s*,*[0-9]+\s*,*]?$/);
+        draw_path();
+    });
     update_nodenumbers();
+    if(idx === undefined){
+        var to_focus;
+        $($('.coord').get().reverse()).each(function(){
+            if(!$(this).val()){
+                to_focus = $(this);
+            }
+        }); 
+        to_focus.focus();
+    } else {
+        var next_n = Number(idx.attr('num'))+1;
+        $('[num="'+next_n+'"]').find('.coord').focus();
+    }
 };
 
 
@@ -118,6 +130,7 @@ $(document).ready(function(){
         save_nodes();
         $('#path_nodes').empty();
         $('#no_nodes').show();
+        draw_path();
 
     });
     $(window).bind("beforeunload", function(){
