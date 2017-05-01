@@ -94,6 +94,10 @@ body{
     cursor:pointer;
 }
 
+.node-end.active{
+    fill:#999999;
+    r:8;
+}
 .node-click:focus{
     color:#222;
     text-decoration:none;

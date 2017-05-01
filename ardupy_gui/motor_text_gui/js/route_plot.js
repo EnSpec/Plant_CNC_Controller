@@ -52,7 +52,8 @@ var form_verify = function(form,regex){
     }
 };
 
-var append_node = function(idx){
+var append_node = function(idx,focus_new){
+    console.log(idx);
     $('.path_node.active').removeClass('active');
     $('#no_nodes').hide();
     var n_nodes = $('.path_node').length+1;
@@ -106,6 +107,10 @@ var append_node = function(idx){
     $('.coord, .wait, .path_node').click(function(){
         $('.path_node.active').removeClass('active');
         $(this).closest('.path_node').addClass('active');
+        draw_path();
+    });
+    $('.coord, .wait').focus(function(){
+        $(this).trigger('click');
     });
     $('.coord').keydown(coord_keydown);
     $('.coord').change(function(){
@@ -118,6 +123,7 @@ var append_node = function(idx){
         draw_path();
     });
     update_nodenumbers();
+    if(!focus_new) return;
     if(idx === undefined){
         var to_focus;
         $($('.coord').get().reverse()).each(function(){
@@ -142,7 +148,7 @@ $(document).ready(function(){
         $('#path_nodes').empty();
         $('#no_nodes').show();
         draw_path();
-
+        append_node();
     });
     $(window).bind("beforeunload", function(){
         save_nodes();

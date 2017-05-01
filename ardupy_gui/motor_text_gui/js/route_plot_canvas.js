@@ -72,50 +72,67 @@ var label_edges = function(){
 
 /*Basically reimplementing jquery-ui.draggable
  */
+var DBL = false;
 var node_click_func = function(node){
-        var vbstr = $('#path_plot').attr('viewBox');
-        var key = node.attr('key');
-        //we're using a weird mix of jQuery and d3, just deal with it for now
-        path_plot_svg.select('circle[key="'+key+'"]').
-            classed('active',true);
-        $('.path_node.active').removeClass('active'); 
-        var coordbox = $('.path_node[num="'+key+'"] .coord');
-        coordbox.closest('.path_node').addClass('active');
-        var viewbox = {
-            x0: Number(vbstr.split(' ')[0]),
-            y0: Number(vbstr.split(' ')[1]),
-            xspan: Number(vbstr.split(' ')[2]),
-            yspan: Number(vbstr.split(' ')[3]),
-        };
-        var mouseinfo=new Object();
-        var offset = $('#path_plot').offset();
-        var offsetX = offset.left;
-        var offsetY = offset.top;
-        var width = $('#path_plot').width();
-        var height= $('#path_plot').height();
-        //glorious 30 fps
-        var change_throt = _.throttle(function(){coordbox.trigger('change')},34);
-        $(document).mousemove(function(event){
-            mouseinfo.x = (viewbox.x0+viewbox.xspan*
-                    (event.pageX - offsetX)/width)|0;
-            mouseinfo.y = Number(viewbox.y0+viewbox.yspan*
-                    (event.pageY - offsetY)/height)|0;
-            var coords = canvasLocToSteps(mouseinfo.x,mouseinfo.y);
-            coordbox.val(coords.x+', '+coords.y);
-            change_throt();
-        });
-        $(document).mouseup(function(){
-            $(document).unbind('mousemove');
-            //focus on the end of the selected node, 
-            //so "enter" will duplicate the current one
-            coordbox.siblings('.wait').focus(); 
-            $(document).unbind('mouseup');
-        });
+
+    var key = 0;
+    if(DBL){
+        DBL = false;
+        append_node($('.path_node.active'),false);
+        key = 1;
+    }else{
+        DBL=true;
+        setTimeout(function(){DBL=false},400);
+    }
+    var vbstr = $('#path_plot').attr('viewBox');
+    key += Number(node.attr('key'));
+    //we're using a weird mix of jQuery and d3, just deal with it for now
+    node = path_plot_svg.selectAll('circle[key="'+key+'"]');
+    if(!node.classed('active')){
+        path_plot_svg.selectAll('circle.node-end.active').
+            classed('active',false);
+    }
+    $('.path_node.active').removeClass('active'); 
+    var coordbox = $('.path_node[num="'+key+'"] .coord');
+    coordbox.closest('.path_node').addClass('active');
+    var viewbox = {
+        x0: Number(vbstr.split(' ')[0]),
+        y0: Number(vbstr.split(' ')[1]),
+        xspan: Number(vbstr.split(' ')[2]),
+        yspan: Number(vbstr.split(' ')[3]),
+    };
+    var mouseinfo=new Object();
+    var offset = $('#path_plot').offset();
+    var offsetX = offset.left;
+    var offsetY = offset.top;
+    var width = $('#path_plot').width();
+    var height= $('#path_plot').height();
+    //glorious 30 fps
+    var change_throt = _.throttle(function(){
+        coordbox.trigger('change')
+    },34);
+    $(document).mousemove(function(event){
+        mouseinfo.x = (viewbox.x0+viewbox.xspan*
+                (event.pageX - offsetX)/width)|0;
+        mouseinfo.y = Number(viewbox.y0+viewbox.yspan*
+                (event.pageY - offsetY)/height)|0;
+        var coords = canvasLocToSteps(mouseinfo.x,mouseinfo.y);
+        coordbox.val(coords.x+', '+coords.y);
+        change_throt();
+    });
+    $(document).mouseup(function(){
+        $(document).unbind('mousemove');
+        //focus on the end of the selected node, 
+        //so "enter" will duplicate the current one
+        //$(document).unbind('mouseup');
+        draw_path();
+    });
 }
 var draw_path = function(){
     var coords= _.filter(_.map($('.coord'),function(coord){
         return parse_coords($(coord).val());    
     }));
+    var active_key = Number($('.path_node.active').attr('num'));
     //$('.usr-draw').each(function(){$(this).remove()});
     var doForEachCoord = function(callback){
         var last_coords = stepsToCanvasLoc(0,0);
@@ -136,14 +153,17 @@ var draw_path = function(){
         
     });
     doForEachCoord(function(last_coords,coord,idx){
+        var nodeclass = "node-end usr-draw";
+        if(active_key == idx+1) nodeclass+=' active';
         path_plot_svg.append('circle')
-            .attr("class","node-end usr-draw")
+            .attr("class",nodeclass)
             .attr("cx",coord.y).attr("cy",coord.x)
             .attr("r",7)
             .attr("fill","white").attr("stroke","black")
             .attr("key",idx+1);
     });
     $('.node-end').mousedown(function(){node_click_func($(this),true)});
+
 }
 
 $(document).ready(function(){
@@ -151,12 +171,10 @@ $(document).ready(function(){
     label_edges();
     $(window).keydown(function(event){
         //don't trigger key-based controls if the user is typing
-        if($('.menu:hover').length > 0) return;
-        if($('.menu input:focus').length > 0) return;
+        if($('input:focus').length > 0) return;
         if(!$('.path_node.active .coord').val()) return;
         
         var coords = parse_coords($('.path_node.active .coord').val());
-        console.log(coords);
        
         var step = Number($("#grid_size").val());
         switch(event.key){
@@ -173,9 +191,13 @@ $(document).ready(function(){
                 $('.path_node.active .coord').val(coords.x+', '+(coords.y+step));
                 break;
             case "Enter":
-                append_node($('.path_node.active'));
+                append_node($('.path_node.active'),false);
+                break;
+            case "delete":
+                $('.path_node.active .node_close').click();
                 break;
         }
-        $('.path_node.active .coord').trigger('change');
+        draw_path();
+        //$('.path_node.active').trigger('change');
     });
 });
