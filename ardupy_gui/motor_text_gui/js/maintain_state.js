@@ -29,17 +29,19 @@ var save_nodes = function(){
 };
 
 var restore_nodes = function(callback){
+    //this is super slow, I don't know why yet
     external.restore_state('nodes',function(saved_nodes){
         if(!saved_nodes) return;
         _.each(saved_nodes,function(node,i){
             if(i%2==0){
                 callback();
-                $('.coord').last().val(node).trigger('change');
+                $('.coord').last().val(node);
             } else {
-                $('.wait').last().val(node).trigger('change');
+                $('.wait').last().val(node);
             }
         });
     });
+    $('.coord').last().trigger('change');
 };
 var restore_forms = function(){
     $('[type=text]').each(function(){

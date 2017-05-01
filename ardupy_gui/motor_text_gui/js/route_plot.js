@@ -37,7 +37,7 @@ var wait_keydown = function(event){
       $('.node_num:contains("'+next_node+'")').siblings('.coord').focus();
       //check that the focus was moved off this
       if($(this).is(':focus')){
-          append_node();
+          append_node($(this).closest('.path_node'));
           var next_node = 1+Number($(this).siblings('.node_num').html());
           $('.node_num:contains("'+next_node+'")').siblings('.coord').focus();
       }
@@ -53,11 +53,12 @@ var form_verify = function(form,regex){
 };
 
 var append_node = function(idx){
+    $('.path_node.active').removeClass('active');
     $('#no_nodes').hide();
     var n_nodes = $('.path_node').length+1;
     var coord_id = "coord_"+n_nodes;
     var wait_id = "wait_"+n_nodes;
-    var new_node = $(`<li class="col-12 path_node" num=${n_nodes}>
+    var new_node = $(`<li class="col-12 path_node active" num=${n_nodes}>
           <div class="row">
             <div class="col-12">
                 <span>
@@ -76,8 +77,11 @@ var append_node = function(idx){
 
     if(idx == undefined){
         $('#path_nodes').append(new_node);
+        new_node.find('.coord').val("0, 0");
     }else{
         idx.after(new_node); 
+        new_node.find('.coord').val(idx.find('.coord').val());
+        new_node.find('.wait').val(idx.find('.wait').val());
     }
     //unbind previous function attachments so that things are
     //only called once
@@ -94,8 +98,15 @@ var append_node = function(idx){
 
     //unbind previous function attachments so that things are
     //only called once
-    $('.coord, .wait').unbind('keydown').unbind('change');
+    $('.coord, .wait, .path_node')
+        .unbind('keydown')
+        .unbind('click')
+        .unbind('change');
 
+    $('.coord, .wait, .path_node').click(function(){
+        $('.path_node.active').removeClass('active');
+        $(this).closest('.path_node').addClass('active');
+    });
     $('.coord').keydown(coord_keydown);
     $('.coord').change(function(){
         form_verify($(this),/^[\s*,*[0-9]+[,|\s]+[0-9]+\s*,*]?$/);
@@ -136,5 +147,12 @@ $(document).ready(function(){
     $(window).bind("beforeunload", function(){
         save_nodes();
     });
+    //set the max height of the path-node div and make it scrollable
+    $(window).resize(function(){
+        var plot_end = $('#path_plot').offset().top+$('#path_plot').height();
+        var max_node_height = plot_end - $('#path_nodes').offset().top;
+        $('#path_nodes').css('max-height',max_node_height);
+
+    }).trigger('resize');
     restore_nodes(append_node);
 });

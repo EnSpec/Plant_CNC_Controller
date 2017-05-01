@@ -33,7 +33,7 @@
                   <h4>Route Plotter:</h4>
                   </div>
               </div>
-              <div class="row">
+              <div class="row menu">
                   <div class="col-7 col-md-6">
                     <span>Destination Points:</span>
                   </div>
@@ -41,8 +41,15 @@
                       <button id="add_node"  type="button" class="btn btn-primary btn-sm">Add <b>+</b></button>
                       <button id="clear_nodes"  type="button" class="btn btn-Danger btn-sm">Clear&#10006;</button>
                   </div>
+                  <div class="col-12">
+                    <span>Snap Points to Grid:
+                        &nbsp;<input class="num_form text-center" value=50 id="grid_size" type="text">
+                        &nbsp;steps
+                    </span>
+                  </div>
+                  
                   <div class="col-12" id="no_nodes">
-                      <p>Click "Add" to add a destination</p>
+                      <!--p>Click "Add" to add a destination</p-->
                   </div>
               </div>
               <ul id="path_nodes" class="row">
@@ -55,7 +62,7 @@
             <!--Plot of path-->
             <div class="col-sm-12 col-md-6">
               <div class="col-12">
-                <span>Plot of Route:</span>
+                <span style="user-select:none">Plot of Route:</span>
               </div>
               <div class="col-12">
                 <div id="canvas-border">
@@ -67,6 +74,7 @@
         </div>
     </div>
     <script type="text/javascript" src="js/maintain_state.js"></script>
+    <script type="text/javascript" src="js/d3.min.js"></script>
     <script type="text/javascript" src="js/route_plot_canvas.js"></script>
     <script type="text/javascript" src="js/route_plot.js"></script>
 </body>
