@@ -1,4 +1,9 @@
-Python serial interface with arduino  
-`ardupy_gui/` contains scripts and assets for a cefpython gui  
-`arduino_scripts/` contains scripts for the arduino  
-You will need `sudo` to run any script that interfaces with arduino.
+## ARDUPY GUI
+Python serial interface with arduino. The project contains 2 components:
+a C++ project designed to be compiled and run on Arduino
+(located at `arduino_scripts/Motor_Shield_Controller`), and a python-based
+GUI to interface with the compiled Arduino code
+(located at `ardupy_gui/motor_text_gui`)
+
+### C++ Part
+T
