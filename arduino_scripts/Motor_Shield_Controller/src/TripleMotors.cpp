@@ -7,7 +7,6 @@ TripleMotors::TripleMotors(AccelStepper * s1, AccelStepper * s2, AccelStepper * 
   stepper1 = s1;
   stepper2 = s2;
   stepper3 = s3;
-
 }
 
 void TripleMotors::begin(){
