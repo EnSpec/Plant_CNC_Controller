@@ -103,7 +103,8 @@ class External(object):
 
 
 def main():
-    url= 'file://%s/index.html'%os.getcwd()
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    url= 'file://%s/index.html'%script_dir
     print(url)
     check_versions()
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
