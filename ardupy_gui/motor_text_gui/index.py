@@ -32,7 +32,12 @@ class External(object):
         1 - absolute target
         3 - relative target
         """
-        self.send('%d,'%mode+(' %d,'%mode).join(string.split()),use_end)
+        mode = str(mode)
+        string = string.replace(',',' ').split()
+        string = ' '.join([mode+','+c1+','+c2 for (c1,c2) 
+            in zip(string[::2],string[1::2])])
+
+        self.send(string)
 
     def send_delay(self,string,use_end=True):
         """Formulates a change-delay request from a single delay_ms value,
@@ -47,7 +52,7 @@ class External(object):
             if len(string) > 1:
                 self.raise_serial_err("Not currently connected to an Arduino")
             return
-
+        if string !='n': print(string)
         int_strings = string.replace(',',' ').split()
         try:
             for substr in int_strings:

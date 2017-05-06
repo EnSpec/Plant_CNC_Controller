@@ -1,6 +1,6 @@
 #include"TripleMotors.h"
-#define XSPEED 200
-#define XACCELL 50
+#define XSPEED 50
+#define XACCELL 10
 // define accelstepper objects with the step functions
 
 TripleMotors::TripleMotors(AccelStepper * s1, AccelStepper * s2, AccelStepper * s3){

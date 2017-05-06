@@ -20,6 +20,7 @@ void forwardstep1() {
 void backwardstep1() {
   motor1->onestep(BACKWARD, SINGLE);
 }
+
 void forwardstep2() {
   motor2->onestep(FORWARD, SINGLE);
 }
@@ -39,5 +40,4 @@ void backwardstep3() {
 AccelStepper stepper1(forwardstep1, backwardstep1);
 AccelStepper stepper2(forwardstep2, backwardstep2);
 AccelStepper stepper3(forwardstep3, backwardstep3);
-
 #endif

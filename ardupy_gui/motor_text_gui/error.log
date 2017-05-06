@@ -165,3 +165,21 @@ Traceback (most recent call last):
     raise SerialException('write failed: {}'.format(v))
 serial.serialutil.SerialException: write failed: [Errno 5] Input/output error
 
+
+[2017-05-03 17:14:17] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 36, in send_coords
+    string = ' '.join([mode+','+c1+','+c2 for (a,b) in zip(string,string[1:])])
+  File "index.py", line 36, in <listcomp>
+    string = ' '.join([mode+','+c1+','+c2 for (a,b) in zip(string,string[1:])])
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+
+
+[2017-05-03 17:14:47] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py35.V8FunctionHandler_Execute (cefpython_py35.cpp:97382)
+  File "index.py", line 37, in send_coords
+    string = ' '.join([mode+','+c1+','+c2 for (a,b) in zip(string,string[1:])])
+  File "index.py", line 37, in <listcomp>
+    string = ' '.join([mode+','+c1+','+c2 for (a,b) in zip(string,string[1:])])
+NameError: name 'c1' is not defined
+

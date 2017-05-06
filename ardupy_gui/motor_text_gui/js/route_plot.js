@@ -153,6 +153,16 @@ $(document).ready(function(){
     $(window).bind("beforeunload", function(){
         save_nodes();
     });
+
+    $('#send').click(function(){
+        var tot_delay = 1;
+        $('.coord').each(function(){
+            var coord = $(this);
+            setTimeout(function(){
+                external.send_coords(coord.val());
+            }, (tot_delay++)*500);
+        });
+    });
     //set the max height of the path-node div and make it scrollable
     $(window).resize(function(){
         var plot_end = $('#path_plot').offset().top+$('#path_plot').height();
