@@ -14,16 +14,23 @@ stepper motors along x/y axes using an Adafruit MotorShield or gShield
 
 #### Program Structure
 The following steps are perfomed during each loop() of the program:  
-1. Read a byte from serial. If it froms a complete integer, push that integer to a stack
-(Handled by `SerialInts.cpp`)
+1. Read a byte from serial. If it froms a complete integer, push that 
+integer to a stack (Handled by `SerialInts.cpp`)  
+2. Step motors 1 step towards their destination, if needed (handled by
+`TripleMotors.cpp`)  
+3. Update the current instruction if  a complete instruction 
+has been passed (i.e. 3 complete ascii integers have been passed in). 
+4. Perform an action based on the current instruction (see the next
+section for details)
+
 #### Serial Communication
 Instructions to be sent over serial are formed 
-from 3 null zero (indicated by `\0`) - separated ASCII integers.
+from 3 null zero (indicated by `\0`) - separated ASCII integers.  
 `1 \0 X \0 Y \0`: Move to `X,Y`   
 `2 \0 MS \0 0 \0`: Wait `MS` milliseconds after each subsequent move   
 `3 \0 dX \0 dY \0`: Move `dX,dY` relative to current position  
 (don't wait)  
-Messages returned by the program over serial:
+Messages returned by the program over serial:  
 `Steppers Ready.` at the beginning of the program.   
 `Arrived at X, Y` whenever both axes arrive at a new destination 
 (such that they're both stopped)   

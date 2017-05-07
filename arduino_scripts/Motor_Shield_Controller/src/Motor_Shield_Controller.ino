@@ -92,6 +92,16 @@ void set_incremental_movement_target(){
   target = ACTION_COMPLETE;
 }
 
+
+void send_current_position(){
+  if(hasSentCurrPos == false){
+    hasSentCurrPos = true;
+    Serial.print(" Arrived at ");
+    Serial.print(motors.getX());
+    Serial.print(", ");
+    Serial.print(motors.getY());
+  }
+}
 void loop() {
 
   //Step the motors if they need to be steppd, and read a character if there's
@@ -109,13 +119,7 @@ void loop() {
   if(target == MOVING) finish_movement_target();
   if(target == WAITING_TO_MOVE) move_if_ready();
   if((motors.nRunning() == 0)){
-    if(hasSentCurrPos == false){
-      hasSentCurrPos = true;
-      Serial.print(" Arrived at ");
-      Serial.print(motors.getX());
-      Serial.print(", ");
-      Serial.print(motors.getY());
-    }
+    send_current_position();
     if(target == SET_MOVEMENT_TARGET) set_movement_target();
   }
 
