@@ -1,6 +1,6 @@
 #include"TripleMotors.h"
-#define XSPEED 50
-#define XACCELL 10
+#define XSPEED 1000
+#define XACCELL 1000
 // define accelstepper objects with the step functions
 
 TripleMotors::TripleMotors(AccelStepper * s1, AccelStepper * s2, AccelStepper * s3){
@@ -29,20 +29,20 @@ void TripleMotors::run(){
   stepper3->run();
 }
 
-void TripleMotors::moveToX(int xt){
+void TripleMotors::moveToX(long xt){
   stepper1->moveTo(xt);
   stepper2->moveTo(xt);
 }
 
-void TripleMotors::moveToY(int yt){
+void TripleMotors::moveToY(long yt){
   stepper3->moveTo(yt);
 }
 
-int TripleMotors::getX(){
+long TripleMotors::getX(){
   return stepper1->currentPosition();
 }
 
-int TripleMotors::getY(){
+long TripleMotors::getY(){
   return stepper3->currentPosition();
 }
 
@@ -56,21 +56,49 @@ float TripleMotors::getYspeed(){
 
 void TripleMotors::stop(){
   //complete 1 full rotation in the correct direction then stop
-  moveToRelativeCoords((int)(2*getXspeed()),
-                       (int)(2*getYspeed()));
+  moveToRelativeCoords((long)(2*getXspeed()),
+                       (long)(2*getYspeed()));
 }
-void TripleMotors::moveToCoords(int x, int y){
+void TripleMotors::moveToCoords(long x, long y){
+  updateSpeeds(x,y);
   moveToX(x);
   moveToY(y);
 }
 
-void TripleMotors::moveToRelativeCoords(int x, int y){
+void TripleMotors::updateSpeeds(long x, long y){
+  long dx = getX() - x;
+  long dy = getY() - y;
+  if(dx == 0){
+    stepper1->setMaxSpeed(XSPEED);
+    stepper2->setMaxSpeed(XSPEED);
+    return;
+  }
+  if(dy == 0){
+    stepper3->setMaxSpeed(XSPEED);
+    return;
+  }
+  float spd_ratio = (float)dx/(float)dy;
+  if(spd_ratio > 1){
+    stepper1->setMaxSpeed(XSPEED);
+    stepper2->setMaxSpeed(XSPEED);
+    stepper3->setMaxSpeed(XSPEED/spd_ratio);
+  } else {
+    stepper1->setMaxSpeed(XSPEED*spd_ratio);
+    stepper2->setMaxSpeed(XSPEED*spd_ratio);
+    stepper3->setMaxSpeed(XSPEED);
+  }
+
+}
+void TripleMotors::moveToRelativeCoords(long x, long y){
+  stepper1->setMaxSpeed(XSPEED);
+  stepper2->setMaxSpeed(XSPEED);
+  stepper3->setMaxSpeed(XSPEED);
   moveToX(getX()+x);
   moveToY(getY()+y);
 }
 
 
-int TripleMotors::nRunning(){
+long TripleMotors::nRunning(){
   return(stepper1->distanceToGo() != 0) + (stepper2->distanceToGo() != 0)
                  + (stepper3->distanceToGo() != 0);
 }

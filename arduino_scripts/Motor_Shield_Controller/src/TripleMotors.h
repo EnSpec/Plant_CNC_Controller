@@ -14,16 +14,17 @@ class TripleMotors{
     void begin();
     void run();
     void stop();
-    int nRunning();
-    void moveToX(int xt);
-    void moveToY(int yt);
-    int getX();
-    int getY();
+    long nRunning();
+    void moveToX(long xt);
+    void moveToY(long yt);
+    long getX();
+    long getY();
     float getXspeed();
     float getYspeed();
-    void moveToCoords(int x, int y);
-    void moveToRelativeCoords(int x, int y);
+    void moveToCoords(long x, long y);
+    void moveToRelativeCoords(long x, long y);
   private:
+    void updateSpeeds(long x, long y);
     AccelStepper * stepper1;
     AccelStepper * stepper2;
     AccelStepper * stepper3;

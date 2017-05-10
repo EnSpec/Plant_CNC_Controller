@@ -22,7 +22,8 @@ integer to a stack (Handled by `SerialInts.cpp`)
 has been passed (i.e. 3 complete ascii integers have been passed in). 
 4. Perform an action based on the current instruction (see the next
 section for details)
-
+    * Some instructions (eg Move) create temporary states, these are not
+    currently documented  
 #### Serial Communication
 Instructions to be sent over serial are formed 
 from 3 null zero (indicated by `\0`) - separated ASCII integers.  
@@ -35,3 +36,16 @@ Messages returned by the program over serial:
 `Arrived at X, Y` whenever both axes arrive at a new destination 
 (such that they're both stopped)   
 `Delay set to MS` whenever a new delay is set  
+
+### Installation
+The progam should be ready to compile and upload in either
+the Arduino IDE or PlatformIO. Instructions for using these tools
+can be found here:  
+* [Arduino IDE](https://www.arduino.cc/en/Main/Software#download)
+* [PlatformIO]
+
+## Python Part
+
+
+
+#### Installation

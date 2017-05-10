@@ -3,10 +3,10 @@
 #include"QueueList.h"
 /* Constructor
  */
-SerialInts::SerialInts(char sep,int size, unsigned long wait){
+SerialInts::SerialInts(char sep,long size, unsigned long wait){
   _sep = sep;
   _wait = wait;
-  _values = QueueList<int>();
+  _values = QueueList<long>();
   _curr_byte = 0;
   _curr_int = 0;
   _in_byte = 0;
@@ -55,11 +55,11 @@ char SerialInts::getCharCode(){
   return _char_code;
 }
 
-int SerialInts::length(){
+long SerialInts::length(){
   return _values.count();
 }
 
-int SerialInts::getInt(){
+long SerialInts::getInt(){
   return _values.pop();
 }
 void SerialInts::clear(){
@@ -69,10 +69,10 @@ void SerialInts::clear(){
   _char_code = '\0';
 }
 void SerialInts::demo(){
-  int example_length = 15;
-  int example_values[] = {1,800,0, /**/ 1,0,0, /**/ 2,0,0,/**/ 1,800,0, /**/ 1,0,0};
-  //int example_values[] = {3,200,0, /**/ 3,200,0, /**/ 3,200,0, /**/ 3,200,0, /**/ 3,200,0};
-  int i;
+  long example_length = 15;
+  long example_values[] = {1,800,0, /**/ 1,0,0, /**/ 2,0,0,/**/ 1,800,0, /**/ 1,0,0};
+  //long example_values[] = {3,200,0, /**/ 3,200,0, /**/ 3,200,0, /**/ 3,200,0, /**/ 3,200,0};
+  long i;
   for(i = 0; i < example_length; _values.push(example_values[i++]));
 }
 SerialInts::~SerialInts(){

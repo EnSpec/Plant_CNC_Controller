@@ -33,7 +33,7 @@ class External(object):
         3 - relative target
         """
         mode = str(mode)
-        string = string.replace(',',' ').split()
+        string = string.replace(',',' ').replace('00','000').split()
         string = ' '.join([mode+','+c1+','+c2 for (c1,c2) 
             in zip(string[::2],string[1::2])])
 

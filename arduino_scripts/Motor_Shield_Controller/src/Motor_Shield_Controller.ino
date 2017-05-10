@@ -7,13 +7,15 @@
 #include "TripleMotors.h"
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 //this includes a bunch of setup code for the motors & defines 3 AccelSteppers
-#include "MotorShieldSetup.h"
+#include "gShieldSetup.h"
 #include "TargetValues.h"
 TripleMotors motors(&stepper1,&stepper2,&stepper3);
 SerialInts si('\0',32,10000);
-
+//Y RANGE: 0 -> 57436 (150 cm)
+//X RANGE: 0 -> 53571 (140 cm)
+//~~ 382.8 steps per cm
 bool hasSentCurrPos, readyForNextAction, waitingOnInstruction;
-int x, y;
+long x, y;
 unsigned long curr_time,delay_ms;
 /* Target deterines the target action for the Motorcontroller
  * Negative targets are used internally, while positive targets can be sent
@@ -34,8 +36,7 @@ void setup() {
    //begin serial connection
    Serial.begin(9600);
    Serial.println("Steppers Ready");
-   AFMS1.begin();
-   AFMS2.begin();
+   setupGShieldPins();
    motors.begin();
    TWBR = ((F_CPU /400000l) - 16) / 2;
    hasSentCurrPos = true;
