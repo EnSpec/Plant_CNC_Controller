@@ -1,7 +1,7 @@
 const X0 = 950;
 const Y0 = 65;
-const xScale = 1;
-const yScale = 1;
+const xScale = .185;
+const yScale = .21;
 var path_plot_svg;
 var stepsToCanvasLoc=function(xsteps,ysteps){
     return{
@@ -47,21 +47,50 @@ var midpoint_marker = function(coord1,coord2){
     var midpt_y = (coord1.y+coord2.y)/2;
     return (`<circle cx=${midpt_y} cy=${midpt_x} r=5 fill="white" stroke="black"/>`);
 };
+
+var edge_coords = [
+    {x:0,y:0},
+    {x:160,y:0},
+    {x:160,y:140},
+    {x:0,y:140}
+];
+
+var draw_gridlines = function(){
+    //draw gridlines at every 5*step 
+    _.each(_.range(0,Math.max(140,160)+1,5*parseInt($('#grid_size').val())),
+            function(coord){
+        var real_coords = stepsToCanvasLoc(coord,coord);
+        path_plot_svg.append('line')
+            .attr("class","svg-gridline")
+            .attr("x1",0).attr("y1",real_coords.x)
+            .attr("x2",800).attr("y2",real_coords.x)
+        path_plot_svg.append('line')
+            .attr("class","svg-gridline")
+            .attr("x1",real_coords.y).attr("y1",0)
+            .attr("x2",real_coords.y).attr("y2",1000)
+    });
+    //draw a boundary box for the valid x,y values
+    var last_coords = stepsToCanvasLoc(edge_coords[0].x,edge_coords[0].y);
+    _.each(_.rest(edge_coords).concat(edge_coords[0]),function(coords){
+        coords = stepsToCanvasLoc(coords.x,coords.y);
+        console.log(coords);
+        path_plot_svg.append('line')
+            .attr("class","svg-boundline")
+            .attr("x1",last_coords.y).attr("y1",last_coords.x)
+            .attr("x2",coords.y).attr("y2",coords.x);
+        last_coords = coords;
+    });
+
+};
 var label_edges = function(){
-    var edge_coords = [
-        {x:0,y:0},
-        {x:160,y:0},
-        {x:160,y:140},
-        {x:0,y:140}
-    ];
     _.each(edge_coords,function(coords){
         var move_coords = {
             x:coords.x,
             y:coords.y
         };
-        move_coords.x +=(coords.x>0)? 10: -55;
-        move_coords.y +=(coords.y>0)?-45*(+coords.x+'(,)'+coords.y).length: 0;
         real_coords = stepsToCanvasLoc(move_coords.x,move_coords.y);
+        real_coords.x += (real_coords.x == X0)?25:-3;
+        real_coords.y += (real_coords.y == Y0)?0:-13*(coords.x+'(,)'+coords.y).length;
         path_plot_svg.append('text')
             .attr('class','coord_label')
             .attr('x',real_coords.y).attr('y',real_coords.x)
@@ -69,7 +98,7 @@ var label_edges = function(){
             .html('('+coords.x+','+coords.y+')');
     });
 
-}
+};
 
 /*Basically reimplementing jquery-ui.draggable
  */
@@ -164,11 +193,11 @@ var draw_path = function(){
             .attr("key",idx+1);
     });
     $('.node-end').mousedown(function(){node_click_func($(this),true)});
-
 }
 
 $(document).ready(function(){
     path_plot_svg = d3.select('#path_plot');
+    draw_gridlines();
     label_edges();
     $(window).keydown(function(event){
         //don't trigger key-based controls if the user is typing

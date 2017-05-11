@@ -21,13 +21,13 @@ unsigned long curr_time,delay_ms;
  * Negative targets are used internally, while positive targets can be sent
  * by the user.
  * Currently reserved targets:
- * 0 - no action pending
- * 1 - Set target for move after delay
- *   -2 - Waiting until delay is over to move
- *   -1 - Moving after delay
- * 2 - Set delay between moves
- * 3 - Move relative to current position without delay
- * -3 - Slow down and stop
+ * 0 : no action pending
+ * 1 : Set target for move after delay
+ *   -2 : Waiting until delay is over to move
+ *   -1 : Moving after delay
+ * 2 : Set delay between moves
+ * 3 : Move relative to current position without delay
+ * -3 : Slow down and stop
  */
 int target;
 
@@ -45,7 +45,7 @@ void setup() {
    y = 0;
    target = ACTION_COMPLETE;
    curr_time = 0;
-   delay_ms = 2000;
+   delay_ms = 300;
 }
 
 void set_movement_target(){

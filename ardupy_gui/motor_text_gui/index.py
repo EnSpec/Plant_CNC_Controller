@@ -116,7 +116,7 @@ def main():
     #set up a browser
     window_info = cef.WindowInfo()
     window_info.SetAsChild(0, [0,0,1000,650])
-    browser = cef.CreateBrowserSync(window_title="Hello World!", url=url,
+    browser = cef.CreateBrowserSync(window_title="Ardupy Motor Controller", url=url,
             window_info=window_info)
     frame = browser.GetMainFrame()
     #set up the browser's javascript bindings
@@ -132,8 +132,8 @@ def main():
 
 
 def check_versions():
-    print("[hello_world.py] CEF Python {ver}".format(ver=cef.__version__))
-    print("[hello_world.py] Python {ver} {arch}".format(
+    print("[{prog}] CEF Python {ver}".format(prog=sys.argv[0],ver=cef.__version__))
+    print("[{prog}] Python {ver} {arch}".format(prog=sys.argv[0],
           ver=platform.python_version(), arch=platform.architecture()[0]))
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
 

@@ -12,6 +12,18 @@ body{
     border-bottom: 1px solid #999999;
 }
 
+.svg-gridline{
+    stroke: #777;
+    stroke-width: 2;
+    stroke-dasharray:5 10;
+
+}
+.svg-boundline{
+    stroke: #6e6e6e;
+    stroke-width: 3;
+    stroke-dasharray:10 5;
+
+}
 .wait,.num_form{
     height:1.3em;
     width:3em;
@@ -57,9 +69,8 @@ body{
 }
 #path_plot{
     width:100%;
-    background-image:url(../grid.svg);
-    background-size:cover;
-    border-bottom:1px solid black;
+    background-color:white;
+    border:1px solid black;
 }
 
 @media(max-width:991px){
