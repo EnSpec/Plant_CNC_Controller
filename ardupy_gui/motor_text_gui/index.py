@@ -10,7 +10,7 @@ import time
 import serial
 from echo import SerialEcho
 
-
+STEPS_PER_CM = 382.8
 class External(object):
     KEY_CODES = {
         'SUM': ',s',
@@ -25,6 +25,8 @@ class External(object):
         self.err_callback = None
         self.saved_states = dict()
 
+    def coords_to_steps(self,coord_list):
+        return [str(int(float(c)*STEPS_PER_CM)) for c in coord_list]
     def send_coords(self,string,mode=1,use_end=True):
         """Appends 1, to each set of target_x,target_y coords in string
         then sends it to arduino using self.send
@@ -33,7 +35,7 @@ class External(object):
         3 - relative target
         """
         mode = str(mode)
-        string = string.replace(',',' ').replace('00','000').split()
+        string = self.coords_to_steps(string.replace(',',' ').split())
         string = ' '.join([mode+','+c1+','+c2 for (c1,c2) 
             in zip(string[::2],string[1::2])])
 

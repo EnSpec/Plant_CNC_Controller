@@ -1,11 +1,12 @@
-const X0 = 860;
-const xScale = 3;
-const yScale = 3;
+const X0 = 950;
+const Y0 = 65;
+const xScale = 1;
+const yScale = 1;
 var path_plot_svg;
 var stepsToCanvasLoc=function(xsteps,ysteps){
     return{
         x:X0-xsteps/xScale,
-        y:ysteps/yScale
+        y:Y0+ysteps/yScale
     };
 }
 
@@ -19,7 +20,7 @@ var closet_multiple = function(x,mul){
 var canvasLocToSteps = function(yloc,xloc){
     var grid = Number($('#grid_size').val());
     var x=(xScale*(X0-xloc))|0;
-    var y=(yScale*yloc)|0;
+    var y=(yScale*(yloc-Y0))|0;
     x= closet_multiple(x,grid);
     y= closet_multiple(y,grid);
     return{
@@ -49,9 +50,9 @@ var midpoint_marker = function(coord1,coord2){
 var label_edges = function(){
     var edge_coords = [
         {x:0,y:0},
-        {x:2600,y:0},
-        {x:2600,y:2000},
-        {x:0,y:2000}
+        {x:160,y:0},
+        {x:160,y:140},
+        {x:0,y:140}
     ];
     _.each(edge_coords,function(coords){
         var move_coords = {
