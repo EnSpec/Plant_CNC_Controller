@@ -87,10 +87,10 @@ $(document).ready(function(){
     restore_forms(); 
     restore_textareas();
 
-    $('#up').click(function(){ external.send_coords('-1,0',3); });
-    $('#dn').click(function(){ external.send_coords('1,0',3); });
-    $('#left').click(function(){ external.send_coords('0,-1',3); });
-    $('#right').click(function(){ external.send_coords('0,1',3); });
+    $('#up').click(function(){ external.send_coords('-5,0',3); });
+    $('#dn').click(function(){ external.send_coords('5,0',3); });
+    $('#left').click(function(){ external.send_coords('0,-5',3); });
+    $('#right').click(function(){ external.send_coords('0,5',3); });
     $(window).keydown(function(event){
         //don't trigger key-based controls if the user is typing
         if($('[type=text], textarea').is(':focus'))return;
