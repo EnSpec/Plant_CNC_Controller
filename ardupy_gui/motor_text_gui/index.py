@@ -104,7 +104,9 @@ class External(object):
         if os.name == 'posix':
             js_callback.Call(glob.glob('/dev/ttyACM*'),External.noop)
         else:
-            js_callback.Call(['COM3'],External.noop)
+            import serial.tools.list_ports as list_ports
+            com_ports = [p.name for p in list_ports.comports()]
+            js_callback.Call(com_ports,External.noop)
 
 
 def main():
