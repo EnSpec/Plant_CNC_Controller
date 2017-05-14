@@ -101,7 +101,10 @@ class External(object):
             self.raise_serial_err("Couldn't connect to Arduino at %s"%tty)
 
     def get_tty_options(self,js_callback):
-        js_callback.Call(glob.glob('/dev/ttyACM*'),External.noop)
+        if os.name == 'posix':
+            js_callback.Call(glob.glob('/dev/ttyACM*'),External.noop)
+        else:
+            js_callback.Call(['COM3'],External.noop)
 
 
 def main():

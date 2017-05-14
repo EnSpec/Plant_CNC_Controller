@@ -49,3 +49,15 @@ can be found here:
 
 
 #### Installation
+##### Windows  
+1. Download and install the latest version of 
+[Python 3](https://www.python.org/) (Not Python 2!!)  
+Make sure to check the option "Add Python 3 to path" in the installer.
+2. Download this package as a zip file from
+[github](https://github.com/westphallm1/ardupy_gui), 
+then extract to a directory of your choice.
+3. Open a command prompt and run the commands `pip install cefpython3`
+and `pip install pySerial`
+4. `cd` into this package's directory from the command prompt.
+5. Run the command `python setup.py install` 
+6. To invoke the GUI, run the `run_ardupy.cmd` batch file either from the Windows explorer or from the command line
