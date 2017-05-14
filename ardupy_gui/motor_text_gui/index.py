@@ -9,6 +9,7 @@ import glob
 import time
 import serial
 from echo import SerialEcho
+import serial.tools.list_ports as list_ports
 
 STEPS_PER_CM = 382.8
 class External(object):
@@ -101,12 +102,8 @@ class External(object):
             self.raise_serial_err("Couldn't connect to Arduino at %s"%tty)
 
     def get_tty_options(self,js_callback):
-        if os.name == 'posix':
-            js_callback.Call(glob.glob('/dev/ttyACM*'),External.noop)
-        else:
-            import serial.tools.list_ports as list_ports
-            com_ports = [p.name for p in list_ports.comports()]
-            js_callback.Call(com_ports,External.noop)
+        com_ports = [p.device for p in list_ports.comports()]
+        js_callback.Call(com_ports,External.noop)
 
 
 def main():
