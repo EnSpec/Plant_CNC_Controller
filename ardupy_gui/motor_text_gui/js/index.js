@@ -77,9 +77,7 @@ $(document).ready(function(){
         $('#outdiv').html('');
     });
     
-    $('[href="route_plot.html"]').click(function(){
-    });
-    
+
     $(window).bind("beforeunload", function(){
         save_forms();
         save_textareas();

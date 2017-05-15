@@ -8,7 +8,11 @@ import os
 import glob
 import time
 import serial
-from echo import SerialEcho
+try:
+    from . import echo
+    SerialEcho = echo.SerialEcho
+except SystemError:
+    from echo import SerialEcho
 import serial.tools.list_ports as list_ports
 
 STEPS_PER_CM = 382.8
@@ -29,7 +33,7 @@ class External(object):
     def coords_to_steps(self,coord_list):
         return [str(int(float(c)*STEPS_PER_CM)) for c in coord_list]
     def send_coords(self,string,mode=1,use_end=True):
-        """Appends 1, to each set of target_x,target_y coords in string
+        """Appends '1,' to each set of target_x,target_y coords in string
         then sends it to arduino using self.send
         mode determines movement type:
         1 - absolute target
