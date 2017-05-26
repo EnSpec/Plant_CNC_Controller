@@ -105,6 +105,11 @@ body{
     cursor:pointer;
 }
 
+.node-end{
+    r:7;
+    fill:white;
+    stroke:black;
+}
 .node-end.active{
     fill:#999999;
     r:8;

@@ -100,6 +100,50 @@ var label_edges = function(){
 
 };
 
+var set_active = function(key){
+    key = Number(key);
+    var node = path_plot_svg.selectAll('circle[key="'+key+'"]');
+    var headline = path_plot_svg.selectAll('line[key="'+key+'"]');
+    var footline = path_plot_svg.selectAll('line[key="'+(key+1)+'"]');
+    //there's probably a cleaner way to determine this
+    var isLastNode = footline._groups[0].length == 0;
+    if(!node.classed('active')){
+        path_plot_svg.selectAll('circle.node-end.active').
+            classed('active',false);
+        node.classed('active',true);
+    }
+
+    $('.path_node.active').removeClass('active'); 
+    var coordbox = $('.path_node[num="'+key+'"] .coord');
+    coordbox.closest('.path_node').addClass('active');
+    return {
+        isLastNode:isLastNode,
+        key:key,
+        node:node,
+        headline:headline,
+        footline:footline,
+        coordbox:coordbox
+    };
+}
+
+
+/* Takes an object with the following parameters:
+ * coordbox is a jquery input text object,
+ * node is a d3 svg circle object
+ * headline and footline are d3 svg line objects
+ * it kinda works
+ */
+var update_active_node = function(active_info){
+    var coords = parse_coords(active_info.coordbox.val());
+    var coord = stepsToCanvasLoc(coords.x,coords.y);
+    active_info.node.attr("cx",coord.y).attr("cy",coord.x);
+    active_info.headline.attr("x2",coord.y).attr("y2",coord.x);
+    active_info.footline.attr("x1",coord.y).attr("y1",coord.x);
+}
+
+var insert_node = function(active_info){
+
+};
 /*Basically reimplementing jquery-ui.draggable
  */
 var DBL = false;
@@ -116,21 +160,15 @@ var node_click_func = function(node){
     }
     var vbstr = $('#path_plot').attr('viewBox');
     key += Number(node.attr('key'));
+    var active_info = set_active(key);
     //we're using a weird mix of jQuery and d3, just deal with it for now
-    node = path_plot_svg.selectAll('circle[key="'+key+'"]');
-    if(!node.classed('active')){
-        path_plot_svg.selectAll('circle.node-end.active').
-            classed('active',false);
-    }
-    $('.path_node.active').removeClass('active'); 
-    var coordbox = $('.path_node[num="'+key+'"] .coord');
-    coordbox.closest('.path_node').addClass('active');
     var viewbox = {
         x0: Number(vbstr.split(' ')[0]),
         y0: Number(vbstr.split(' ')[1]),
         xspan: Number(vbstr.split(' ')[2]),
         yspan: Number(vbstr.split(' ')[3]),
     };
+    
     var mouseinfo=new Object();
     var offset = $('#path_plot').offset();
     var offsetX = offset.left;
@@ -138,8 +176,8 @@ var node_click_func = function(node){
     var width = $('#path_plot').width();
     var height= $('#path_plot').height();
     //glorious 30 fps
-    var change_throt = _.throttle(function(){
-        coordbox.trigger('change')
+    var change_throttled = _.throttle(function(){
+        update_active_node(active_info);
     },34);
     $(document).mousemove(function(event){
         mouseinfo.x = (viewbox.x0+viewbox.xspan*
@@ -147,18 +185,17 @@ var node_click_func = function(node){
         mouseinfo.y = Number(viewbox.y0+viewbox.yspan*
                 (event.pageY - offsetY)/height)|0;
         var coords = canvasLocToSteps(mouseinfo.x,mouseinfo.y);
-        coordbox.val(coords.x+', '+coords.y);
-        change_throt();
+        active_info.coordbox.val(coords.x+', '+coords.y);
+        change_throttled();
     });
     $(document).mouseup(function(){
         $(document).unbind('mousemove');
-        //focus on the end of the selected node, 
-        //so "enter" will duplicate the current one
-        //$(document).unbind('mouseup');
-        draw_path();
     });
 }
+
+
 var draw_path = function(){
+    console.log("Redrawing canvas!");
     var coords= _.filter(_.map($('.coord'),function(coord){
         return parse_coords($(coord).val());    
     }));
@@ -188,8 +225,6 @@ var draw_path = function(){
         path_plot_svg.append('circle')
             .attr("class",nodeclass)
             .attr("cx",coord.y).attr("cy",coord.x)
-            .attr("r",7)
-            .attr("fill","white").attr("stroke","black")
             .attr("key",idx+1);
     });
     $('.node-end').mousedown(function(){node_click_func($(this),true)});

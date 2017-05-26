@@ -105,9 +105,7 @@ var append_node = function(idx,focus_new){
         .unbind('change');
 
     $('.coord, .wait, .path_node').click(function(){
-        $('.path_node.active').removeClass('active');
-        $(this).closest('.path_node').addClass('active');
-        draw_path();
+        set_active($(this).closest('.path_node').attr('num'));
     });
     $('.coord, .wait').focus(function(){
         $(this).trigger('click');
@@ -115,14 +113,16 @@ var append_node = function(idx,focus_new){
     $('.coord').keydown(coord_keydown);
     $('.coord').change(function(){
         form_verify($(this),/^[\s*,*[0-9]+[,|\s]+[0-9]+\s*,*]?$/);
-        draw_path();
+        update_active_node(set_active($(this).closest('.path_node').attr('num')));
     });
     $('.wait').keydown(wait_keydown);
     $('.wait').change(function(){
         form_verify($(this),/^[\s*,*[0-9]+\s*,*]?$/);
-        draw_path();
+        update_active_node(set_active($(this).closest('.path_node').attr('num')));
     });
+
     update_nodenumbers();
+
     if(!focus_new) return;
     if(idx === undefined){
         var to_focus;
