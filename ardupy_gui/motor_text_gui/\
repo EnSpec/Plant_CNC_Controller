@@ -54,10 +54,17 @@ var form_verify = function(form,regex){
 
 
 var get_node_template = function(){
+
+};
+
+var append_node = function(idx,focus_new){
+    console.log(idx);
+    $('.path_node.active').removeClass('active');
+    $('#no_nodes').hide();
     var n_nodes = $('.path_node').length+1;
     var coord_id = "coord_"+n_nodes;
     var wait_id = "wait_"+n_nodes;
-    return new_node = $(`<li class="col-12 path_node active" num=${n_nodes}>
+    var new_node = $(`<li class="col-12 path_node active" num=${n_nodes}>
           <div class="row">
             <div class="col-12">
                 <span>
@@ -72,19 +79,8 @@ var get_node_template = function(){
                 </span>
             </div>
            </div>
-          </li>`
-    );
+          </li>`);
 
-};
-
-var append_node = function(idx,focus_new){
-    console.log(idx);
-    $('.path_node.active').removeClass('active');
-    $('#no_nodes').hide();
-    var n_nodes = $('.path_node').length+1;
-    var coord_id = "coord_"+n_nodes;
-    var wait_id = "wait_"+n_nodes;
-    var new_node = get_node_template();
     if(idx == undefined){
         $('#path_nodes').append(new_node);
         new_node.find('.coord').val("0, 0");
@@ -147,29 +143,19 @@ var append_node = function(idx,focus_new){
     }
 };
 
-/* Clears out the current route, then generates and plots
- * a new route based on the values of the grid-draw form
- * and a specified pattern function
- */
 var set_node_pattern = function(pattern_func){
     var start = parse_coords($('#grid_orig').val());
-    var height = Number($('#grid_h').val());
-    var width = Number($('#grid_w').val());
-    var step = Number($('#grid_s').val());
+    var height = $('#grid_h').val();
+    var width = $('#grid_w').val();
+    var step = $('#grid_s').val();
     var coords = pattern_func(start,height,width,step);
-    //if a parameter from above is falsy, exit out
-    if(!(start && height && width && step && coords)) return;
-    $('#path_nodes').empty();
-    //for each coordinate returned by pattern func,
-    //add a new path node containing that coordinate
     _.each(coords,function(coord){
-        var new_node = get_node_template();
-        new_node.find('.coord').val(coord.x + ', '+ coord.y);
-        $('#path_nodes').append(new_node);
+
+
     });
     update_nodenumbers();
 
-};
+});
 
 $(document).ready(function(){
     $('#path_nodes').sortable({update:update_nodenumbers});
@@ -184,20 +170,11 @@ $(document).ready(function(){
     $('#draw-mode').change(function(){
         $('.draw-menu').hide();
         $('#'+$(this).val()).show();
-        $(window).trigger('resize');
-    });
-    $('#add_grid').click(function(){
-        set_node_pattern(grid_pattern);
     });
     $(window).bind("beforeunload", function(){
         save_nodes();
-        save_forms();
-        save_textareas();
     });
 
-    restore_forms(); 
-    restore_textareas();
-    setTimeout(function(){$('#draw-mode').change()},500);
     $('#send').click(function(){
         var tot_delay = 1;
         $('.coord').each(function(){

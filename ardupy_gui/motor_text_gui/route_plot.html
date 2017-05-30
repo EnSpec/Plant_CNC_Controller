@@ -23,41 +23,90 @@
           </li>
         </ul>
       </div>
-    </nav>    
+    </nav>
     <div class="container">
         <div class="row" >
-            <!--Path node widgets-->
+            <!--path node widgets-->
             <div class="col-sm-12 col-md-6 col-lg-5">
               <div class = "col-sm-12">
                 <div class="row">
                   <h4>Route Plotter:</h4>
                   </div>
               </div>
-              <div class="row menu">
-                  <div class="col-7 col-md-6">
-                    <span>Destination Points:</span>
-                  </div>
-                  <div class="col-5 col-md-6 text-right">
-                      <button id="add_node"  type="button" class="btn btn-primary btn-sm">Add <b>+</b></button>
-                      <button id="clear_nodes"  type="button" class="btn btn-Danger btn-sm">Clear&#10006;</button>
-                  </div>
-                  <div class="col-9">
-                    <span>Snap Points to Grid:
-                        &nbsp;<input class="num_form text-center" value=5 id="grid_size" type="text">
-                        &nbsp;cm
-                    </span>
-                  </div>
-                  <div class="col-3 text-right">
-                      <button id="send"  type="button" class="btn btn-success btn-sm">Send &#10145;</button>
-                  </div>
-                  
-                  <div class="col-12" id="no_nodes">
-                      <!--p>Click "Add" to add a destination</p-->
-                  </div>
+              <div class="row menu" style="padding-bottom:5px">
+                <div class="col-sm-7 col-md-5 col-lg-7">
+                  <span>Plotting Mode: </span>
+                  <select id="draw-mode">
+                    <option value="free-draw">Free Draw</option>
+                    <option value="grid-draw">Scan Area</option>
+                  </select>
+                </div>
+                <div class="col-sm-5 col-md-7 col-lg-5 text-right">
+                    <button id="clear_nodes"  type="button" class="btn btn-Danger btn-sm">Clear&#10006;</button>
+                    <button id="send"  type="button" class="btn btn-success btn-sm">Send &#10145;</button>
+                </div>
               </div>
+              <div id="free-draw" class="row draw-menu">
+                <div class="col-5">
+                  <span>Free Draw:</span>
+                </div>
+                <div class="col-7 text-right">
+                    <button id="add_node"  type="button" class="btn btn-primary btn-sm">Add Point <b>+</b></button>
+                </div>
+                <div class="col-9" style="margin-left:1em">
+                  <span>Snap Points to Grid:
+                      &nbsp;<input class="num_form text-center" value=5 id="grid_size" type="text">
+                      &nbsp;cm
+                  </span>
+                </div>
+                <div class="col-3 text-right">
+                </div>
+
+                <div class="col-12" id="no_nodes">
+                    <!--p>Click "Add" to add a destination</p-->
+                </div>
+              </div>
+              <div id="grid-draw" style="display:none" class="row draw-menu">
+                <div class="col-sm-8">
+                  <span>Specify Area:</span>
+                  <table style="margin-left:1em">
+                    <tbody>
+                      <tr>
+                        <td>Center:</td>
+                        <td>
+                          <input placeholder="    ,"
+                          class="double_num_form" id="grid_orig" type="text">
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Width:</td>
+                        <td>
+                          <input class="num_form" id="grid_w" type="text"> cm
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Height:</td>
+                        <td>
+                          <input class="num_form" id="grid_h" type="text"> cm
+                        </td>
+                      </td>
+                      <tr>
+                        <td>Step:</td>
+                        <td>
+                          <input class="num_form" id="grid_s" type="text"> cm
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-sm-4 text-right">
+                    <button id="add_grid"  type="button" class="btn btn-primary btn-sm">Add Path<b>+</b></button>
+                </div>
+              </div>
+
               <ul id="path_nodes" class="row">
-                  <!-- Path node 0-->
-              </ul> 
+                  <!-- path node 0-->
+              </ul>
 
             </div>
             <div class="col-lg-1 lg-spacer">
@@ -79,5 +128,6 @@
     <script type="text/javascript" src="js/maintain_state.js"></script>
     <script type="text/javascript" src="js/d3.min.js"></script>
     <script type="text/javascript" src="js/route_plot_canvas.js"></script>
+    <script type="text/javascript" src="js/route_plot_patterns.js"></script>
     <script type="text/javascript" src="js/route_plot.js"></script>
 </body>

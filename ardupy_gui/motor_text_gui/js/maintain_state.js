@@ -1,5 +1,5 @@
 var save_forms = function(){
-    $('[type=text]').each(function(){
+    $('[type=text],select').each(function(){
         external.save_state($(this).attr('id'),$(this).val());
     });
 };
@@ -43,16 +43,13 @@ var restore_nodes = function(callback){
     });
     $('.coord').last().trigger('change');
 };
+//restores every form on the page
 var restore_forms = function(){
-    $('[type=text]').each(function(){
+    $('[type=text],select').each(function(){
         var form = $(this);
         external.restore_state(form.attr('id'),
         function(saved_val,py_callback){
            form.val(saved_val); 
         });
     });
-
-
-
-
 };

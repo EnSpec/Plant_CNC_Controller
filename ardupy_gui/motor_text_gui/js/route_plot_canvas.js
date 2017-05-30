@@ -131,7 +131,8 @@ var set_active = function(key){
  * coordbox is a jquery input text object,
  * node is a d3 svg circle object
  * headline and footline are d3 svg line objects
- * it kinda works
+ * then updates the active node and any other svg elements
+ * associated with it
  */
 var update_active_node = function(active_info){
     var coords = parse_coords(active_info.coordbox.val());
