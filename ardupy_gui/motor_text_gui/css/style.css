@@ -118,3 +118,8 @@ body{
     color:#222;
     text-decoration:none;
 }
+#dl_link{
+    color: white;
+    border:inherit;
+    user-select:none;
+}

@@ -32,6 +32,7 @@ class External(object):
 
     def coords_to_steps(self,coord_list):
         return [str(int(float(c)*STEPS_PER_CM)) for c in coord_list]
+
     def send_coords(self,string,mode=1,use_end=True):
         """Appends '1,' to each set of target_x,target_y coords in string
         then sends it to arduino using self.send
@@ -76,7 +77,6 @@ class External(object):
         except Exception as e:
             self.raise_serial_err(e)
 
-    
     def show_saved(self):
         print("My saved stuff:")
         print(self.saved_states)

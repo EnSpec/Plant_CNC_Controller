@@ -62,7 +62,7 @@ var get_node_template = function(){
             <div class="col-12">
                 <span>
                 <span class="node_num">${n_nodes}.</span>
-                Go to <input class="coord" id=${coord_id} placeholder="    ," type="text">,
+                Go to <input class="coord" id=${coord_id} placeholder="0 , 0" type="text">,
                 wait <input class="wait" id=${wait_id} placeholder="0" type="text">s
                 </span>
 
@@ -171,6 +171,16 @@ var set_node_pattern = function(pattern_func){
 
 };
 
+var save_route_csv= function(){
+    var csv_string = [];
+    $('.coord,.wait').each(function(){
+        var suffix =$(this).hasClass('coord')?', ':'%0A';
+        var val = $(this).val() || $(this).attr('placeholder');
+        csv_string.push(val+suffix);
+    });
+    csv_string = csv_string.join('');
+    $('#dl_link').attr('href','data:application/csv;charset=utf-8,'+csv_string);
+};
 $(document).ready(function(){
     $('#path_nodes').sortable({update:update_nodenumbers});
     $('#add_node').click(function(){append_node()});
@@ -194,7 +204,7 @@ $(document).ready(function(){
         save_forms();
         save_textareas();
     });
-
+    
     restore_forms(); 
     restore_textareas();
     setTimeout(function(){$('#draw-mode').change()},500);
@@ -206,6 +216,9 @@ $(document).ready(function(){
                 external.send_coords(coord.val());
             }, (tot_delay++)*500);
         });
+    });
+    $('#dl_link').mousedown(function(){
+        save_route_csv();
     });
     //set the max height of the path-node div and make it scrollable
     $(window).resize(function(){

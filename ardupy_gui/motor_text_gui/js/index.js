@@ -12,6 +12,15 @@ var write_to_out = function(py_text,py_callback){
                 $('#outdiv').scrollTop(9999999);
     }
 };
+var update_tty_options = function(reconnect){
+    external.get_tty_options(function(py_data){
+        $('#tty>option').each(function(){$(this).remove()});
+        _.each(py_data,function(item){
+            $('#tty').append('<option>'+item+'</option>');
+        });
+        if(reconnect) $('#tty').trigger('change'); 
+    });
+}
 $(document).ready(function(){
     setInterval(function(){
         //send a no-op byte to the arduino so SerialInts knows it's connected
@@ -36,21 +45,15 @@ $(document).ready(function(){
 
     //Set up 'Scan' button to scan devices that probably match an Arduino
     $('#scan').click(function(){
-        external.get_tty_options(function(py_data){
-            $('#tty>option').each(function(){$(this).remove()});
-            for(item in py_data){
-                $('#tty').append('<option>'+py_data[item]+'</option>');
-            }
-        });
+        update_tty_options(true);
     });
-    $('#scan').trigger('click');
-    setTimeout(function(){$('#tty').trigger('change');},500); 
-
+    update_tty_options(true);
     
     //Clicking 'Send' or pressing enter in form send a series of coordinates
     $('#send').click(function(){
         external.send_coords(val_or_placeholder($('#instr')));
     });
+
     $('#instr').keydown(function(event){
         if(event.keyCode == 13) $('#send').trigger('click');
     });

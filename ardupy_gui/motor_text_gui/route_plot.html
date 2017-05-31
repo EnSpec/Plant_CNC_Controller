@@ -34,19 +34,38 @@
                   </div>
               </div>
               <div class="row menu" style="padding-bottom:5px">
-                <div class="col-sm-7 col-md-5 col-lg-7">
-                  <span>Plotting Mode: </span>
+                <h5 class="col-12">Options</h5>
+                <div class="col-12" style="margin-left:5px">
+                  <div class="btn-group btn-block">
+                    <label style="border-radius:3px"
+                        class="btn btn-file btn-primary btn-block btn-sm">
+                        Load Route <input type="file" id="load_nodes" hidden>
+                    </label>
+                    <a id="dl_link"  type="button" style="border-radius:3px"
+                        class="btn btn-primary btn-block btn-sm"
+                        download="route.csv">Save Route &#128190;
+                    </a>
+                    <button id="clear_nodes"  type="button" style="border-radius:3px"
+                        class="btn btn-Danger btn-block btn-sm">Clear Route &#10006;
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12" style="margin-left:5px">
+                    <button id="send"  type="button" 
+                      class="btn btn-success btn-block btn-sm">
+                        Send Route to Arduino &#10145;
+                    </button>
+                </div>
+                <div class="col-12" style="margin-left:5px">
+                  <span>Plot Mode: </span>
                   <select id="draw-mode">
                     <option value="free-draw">Free Draw</option>
                     <option value="grid-draw">Scan Area</option>
                   </select>
                 </div>
-                <div class="col-sm-5 col-md-7 col-lg-5 text-right">
-                    <button id="clear_nodes"  type="button" class="btn btn-Danger btn-sm">Clear&#10006;</button>
-                    <button id="send"  type="button" class="btn btn-success btn-sm">Send &#10145;</button>
-                </div>
               </div>
               <div id="free-draw" class="row draw-menu">
+                <h5 class="col-12">Plot Options</h5>
                 <div class="col-5">
                   <span>Free Draw:</span>
                 </div>
@@ -68,6 +87,7 @@
               </div>
               <div id="grid-draw" style="display:none" class="row draw-menu">
                 <div class="col-sm-8">
+                <h5 class="col-12">Plot Options</h5>
                   <span>Specify Area:</span>
                   <table style="margin-left:1em">
                     <tbody>
@@ -124,6 +144,7 @@
               </div>
             </div>
         </div>
+        <!--Hidden data uri link for save button-->
     </div>
     <script type="text/javascript" src="js/maintain_state.js"></script>
     <script type="text/javascript" src="js/d3.min.js"></script>

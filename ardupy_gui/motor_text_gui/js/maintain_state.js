@@ -45,11 +45,11 @@ var restore_nodes = function(callback){
 };
 //restores every form on the page
 var restore_forms = function(){
-    $('[type=text],select').each(function(){
+    $('[type=text],option').each(function(){
         var form = $(this);
         external.restore_state(form.attr('id'),
         function(saved_val,py_callback){
-           form.val(saved_val); 
+           if(saved_val) form.val(saved_val); 
         });
     });
 };
