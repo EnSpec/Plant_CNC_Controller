@@ -167,8 +167,7 @@ var set_node_pattern = function(pattern_func){
         new_node.find('.coord').val(coord.x + ', '+ coord.y);
         $('#path_nodes').append(new_node);
     });
-    update_nodenumbers();
-
+    draw_path();
 };
 
 var save_route_csv= function(){
@@ -188,8 +187,25 @@ $(document).ready(function(){
         save_nodes();
         $('#path_nodes').empty();
         $('#no_nodes').show();
-        draw_path();
         append_node();
+    });
+
+    $('#load_nodes').change(function(){
+        var reader = new FileReader();
+        reader.readAsText($(this).prop('files')[0]);
+        reader.onloadend=function(){
+            var result = reader.result;
+            $('#path_nodes').empty();
+            _.each(result.split('\n'),function(line){
+                console.log(line);
+                var vals = line.split(',');
+                var new_node = get_node_template();
+                new_node.find('.coord').val(vals[0] + ', '+ vals[1]);
+                new_node.find('.wait').val(vals[2]);
+                $('#path_nodes').append(new_node);
+            });
+            draw_path();
+        }
     });
     $('#draw-mode').change(function(){
         $('.draw-menu').hide();
@@ -205,6 +221,7 @@ $(document).ready(function(){
         save_textareas();
     });
     
+     
     restore_forms(); 
     restore_textareas();
     setTimeout(function(){$('#draw-mode').change()},500);
