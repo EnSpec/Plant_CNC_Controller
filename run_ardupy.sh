@@ -1,2 +1,3 @@
 #!/bin/bash
-python3 -c "import ardupy_gui.motor_text_gui;ardupy_gui.motor_text_gui.run()"
+cd ~/ardupy/ardupy_gui/motor_text_gui
+python3 index.py

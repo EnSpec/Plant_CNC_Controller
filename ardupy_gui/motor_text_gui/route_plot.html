@@ -37,14 +37,14 @@
                 <h5 class="col-12">Options</h5>
                 <div class="col-12" style="margin-left:5px">
                   <div class="btn-group btn-block">
-                    <label style="border-radius:3px"
+                    <label id="load_label" 
                         class="btn btn-file btn-primary btn-block btn-sm">
                         Load Route <input type="file" id="load_nodes" hidden>
                     </label>
-                    <a id="dl_link"  type="button" style="border-radius:3px"
-                        class="btn btn-primary btn-block btn-sm"
-                        download="route.csv">Save Route &#128190;
-                    </a>
+                    <button type="button" style="border-radius:3px"
+                        class="btn btn-primary btn-block btn-sm">
+                        <a id="dl_link" download="route.csv">Save Route &#128190;</a>
+                    </button>
                     <button id="clear_nodes"  type="button" style="border-radius:3px"
                         class="btn btn-Danger btn-block btn-sm">Clear Route &#10006;
                     </button>
@@ -86,8 +86,8 @@
                 </div>
               </div>
               <div id="grid-draw" style="display:none" class="row draw-menu">
-                <div class="col-sm-8">
                 <h5 class="col-12">Plot Options</h5>
+                <div class="col-sm-8">
                   <span>Specify Area:</span>
                   <table style="margin-left:1em">
                     <tbody>

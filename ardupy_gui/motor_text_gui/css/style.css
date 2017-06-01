@@ -123,3 +123,16 @@ body{
     border:inherit;
     user-select:none;
 }
+#load_label{
+    border-radius:3px;
+    margin-top:8px;
+    margin-bottom:0px;
+}
+
+
+#dl_link:hover{
+    text-decoration:none;
+}
+#dl_link:focus{
+    text-decoration:none;
+}
