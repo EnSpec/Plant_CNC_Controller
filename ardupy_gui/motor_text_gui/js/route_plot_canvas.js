@@ -226,7 +226,8 @@ var draw_path = function(){
         path_plot_svg.append('circle')
             .attr("class",nodeclass)
             .attr("cx",coord.y).attr("cy",coord.x)
-            .attr("key",idx+1);
+            .attr("key",idx+1)
+            .attr("r",7);
     });
     $('.node-end').mousedown(function(){node_click_func($(this),true)});
 }

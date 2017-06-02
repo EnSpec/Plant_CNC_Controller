@@ -1,4 +1,4 @@
-
+//re-number nodes after one is inserted or they are re-ordered
 var update_nodenumbers = function(){
     var n_nodes = $('.path_node').length;
     if(n_nodes == 0){
@@ -17,6 +17,7 @@ var update_nodenumbers = function(){
     }
     draw_path();
 };
+
 
 var coord_keydown = function(event){
    if(event.keyCode == 13)
@@ -44,6 +45,7 @@ var wait_keydown = function(event){
   }
 };
 
+
 var form_verify = function(form,regex){
     if(regex.test(form.val())){
         form.removeClass('alert-danger');
@@ -52,12 +54,12 @@ var form_verify = function(form,regex){
     }
 };
 
-
+//use a template literal to create a new node
 var get_node_template = function(){
     var n_nodes = $('.path_node').length+1;
     var coord_id = "coord_"+n_nodes;
     var wait_id = "wait_"+n_nodes;
-    return new_node = $(`<li class="col-12 path_node active" num=${n_nodes}>
+    return new_node = $(`<li class="col-12 path_node" num=${n_nodes}>
           <div class="row">
             <div class="col-12">
                 <span>
@@ -77,22 +79,9 @@ var get_node_template = function(){
 
 };
 
-var append_node = function(idx,focus_new){
-    console.log(idx);
-    $('.path_node.active').removeClass('active');
-    $('#no_nodes').hide();
-    var n_nodes = $('.path_node').length+1;
-    var coord_id = "coord_"+n_nodes;
-    var wait_id = "wait_"+n_nodes;
-    var new_node = get_node_template();
-    if(idx == undefined){
-        $('#path_nodes').append(new_node);
-        new_node.find('.coord').val("0, 0");
-    }else{
-        idx.after(new_node);
-        new_node.find('.coord').val(idx.find('.coord').val());
-        new_node.find('.wait').val(idx.find('.wait').val());
-    }
+//add on-click and on-change functions to all nodes
+//kinda inefficient
+var bind_actions_to_nodes = function(){
     //unbind previous function attachments so that things are
     //only called once
     $('.node_close, .node_add').unbind('click');
@@ -129,8 +118,28 @@ var append_node = function(idx,focus_new){
         form_verify($(this),/^[\s*,*[0-9]+\s*,*]?$/);
         update_active_node(set_active($(this).closest('.path_node').attr('num')));
     });
+};
+
+//add a new node at the node after idx
+var append_node = function(idx,focus_new){
+    console.log(idx);
+    $('.path_node.active').removeClass('active');
+    $('#no_nodes').hide();
+    var n_nodes = $('.path_node').length+1;
+    var coord_id = "coord_"+n_nodes;
+    var wait_id = "wait_"+n_nodes;
+    var new_node = get_node_template();
+    if(idx == undefined){
+        $('#path_nodes').append(new_node);
+        new_node.find('.coord').val("0, 0");
+    }else{
+        idx.after(new_node);
+        new_node.find('.coord').val(idx.find('.coord').val());
+        new_node.find('.wait').val(idx.find('.wait').val());
+    }
 
     update_nodenumbers();
+    bind_actions_to_nodes();    
 
     if(!focus_new) return;
     if(idx === undefined){
@@ -167,6 +176,7 @@ var set_node_pattern = function(pattern_func){
         new_node.find('.coord').val(coord.x + ', '+ coord.y);
         $('#path_nodes').append(new_node);
     });
+    bind_actions_to_nodes();
     draw_path();
 };
 
@@ -180,60 +190,69 @@ var save_route_csv= function(){
     csv_string = csv_string.join('');
     $('#dl_link').attr('href','data:application/csv;charset=utf-8,'+csv_string);
 };
+
+var load_route_from_csv = function(file){
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onloadend=function(){
+        var result = reader.result;
+        $('#path_nodes').empty();
+        _.each(result.split('\n'),function(line){
+            console.log(line);
+            var vals = line.split(',');
+            if(vals.length == 3){
+                var new_node = get_node_template();
+                new_node.find('.coord').val(vals[0] + ', '+ vals[1]);
+                new_node.find('.wait').val(vals[2]);
+                $('#path_nodes').append(new_node);
+            }
+        });
+        draw_path();
+        bind_actions_to_nodes();
+        draw_path();
+    }
+};
+
+var setup_online_demo = function(){
+    $('#send').prop('disabled',true);
+    $('#send').html("Arduino interface disabled in online demo");
+    $('nav a').attr('href','#');
+    var isChrome = !!window.chrome && !!window.chrome.webstore;
+    if(!isChrome){
+        $('#route_plot_h4').append(
+            "<h5 style='color:red'>For best user experience, use Google Chrome.</h5>"
+        );
+    };
+};
+
 $(document).ready(function(){
     $('#path_nodes').sortable({update:update_nodenumbers});
     $('#add_node').click(function(){append_node()});
     $('#clear_nodes').click(function(){
-        save_nodes();
         $('#path_nodes').empty();
         $('#no_nodes').show();
         append_node();
     });
 
     $('#load_nodes').change(function(){
-        var reader = new FileReader();
-        reader.readAsText($(this).prop('files')[0]);
-        reader.onloadend=function(){
-            var result = reader.result;
-            $('#path_nodes').empty();
-            _.each(result.split('\n'),function(line){
-                console.log(line);
-                var vals = line.split(',');
-                var new_node = get_node_template();
-                new_node.find('.coord').val(vals[0] + ', '+ vals[1]);
-                new_node.find('.wait').val(vals[2]);
-                $('#path_nodes').append(new_node);
-            });
-            draw_path();
-        }
+        load_route_from_csv($(this).prop('files')[0]);
+        //clear my value so the user can load the same file multiple times
+        $(this).val(undefined);
     });
+
+    //toggle the displayed drawing panel when the draw mode select changes
     $('#draw-mode').change(function(){
         $('.draw-menu').hide();
         $('#'+$(this).val()).show();
         $(window).trigger('resize');
     });
+
+    //add a zig zag movement pattern when #add_grid is clicked
     $('#add_grid').click(function(){
         set_node_pattern(grid_pattern);
     });
-    $(window).bind("beforeunload", function(){
-        save_nodes();
-        save_forms();
-        save_textareas();
-    });
+
     
-     
-    restore_forms(); 
-    restore_textareas();
-    setTimeout(function(){$('#draw-mode').change()},500);
-    $('#send').click(function(){
-        var tot_delay = 1;
-        $('.coord').each(function(){
-            var coord = $(this);
-            setTimeout(function(){
-                external.send_coords(coord.val());
-            }, (tot_delay++)*500);
-        });
-    });
     $('#dl_link').mousedown(function(){
         save_route_csv();
     });
@@ -244,5 +263,30 @@ $(document).ready(function(){
         $('#path_nodes').css('max-height',max_node_height);
 
     }).trigger('resize');
-    restore_nodes(append_node);
+     
+    if(external.restore_state){
+        //before we leave the page, save form info
+        $(window).bind("beforeunload", function(){
+            save_nodes();
+            save_forms();
+            save_textareas();
+        });
+        restore_forms(); 
+        restore_textareas();
+
+        setTimeout(function(){$('#draw-mode').change()},500);
+        $('#send').click(function(){
+            var tot_delay = 1;
+            $('.coord').each(function(){
+                var coord = $(this);
+                setTimeout(function(){
+                    external.send_coords(coord.val());
+                }, (tot_delay++)*500);
+            });
+        });
+
+        restore_nodes(append_node);
+    } else {
+        setup_online_demo();
+    }
 });
