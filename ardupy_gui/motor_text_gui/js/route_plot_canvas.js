@@ -1,7 +1,7 @@
-const X0 = 950;
-const Y0 = 65;
+const X0 = 900;
+const Y0 = 22;
 const xScale = .185;
-const yScale = .21;
+const yScale = .185;
 var path_plot_svg;
 var stepsToCanvasLoc=function(xsteps,ysteps){
     return{
@@ -19,8 +19,8 @@ var closet_multiple = function(x,mul){
 };
 var canvasLocToSteps = function(yloc,xloc){
     var grid = Number($('#grid_size').val());
-    var x=(xScale*(X0-xloc))|0;
-    var y=(yScale*(yloc-Y0))|0;
+    var x=(xScale*(X0-xloc));
+    var y=(yScale*(yloc-Y0));
     x= closet_multiple(x,grid);
     y= closet_multiple(y,grid);
     return{
@@ -29,7 +29,7 @@ var canvasLocToSteps = function(yloc,xloc){
     }; 
 }
 var parse_coords = function(coordstr){
-    var splits=[", ",","," "];
+    var splits=[", " , "," , " "];
     return _.filter(_.map(splits,function(split){
         if(coordstr.split(split).length == 2){
             return{
@@ -50,8 +50,8 @@ var midpoint_marker = function(coord1,coord2){
 
 var edge_coords = [
     {x:0,y:0},
-    {x:160,y:0},
-    {x:160,y:140},
+    {x:150,y:0},
+    {x:150,y:140},
     {x:0,y:140}
 ];
 
@@ -137,6 +137,7 @@ var set_active = function(key){
 var update_active_node = function(active_info){
     var coords = parse_coords(active_info.coordbox.val());
     var coord = stepsToCanvasLoc(coords.x,coords.y);
+    form_verify(active_info.coordbox,COORD_REGEX);
     active_info.node.attr("cx",coord.y).attr("cy",coord.x);
     active_info.headline.attr("x2",coord.y).attr("y2",coord.x);
     active_info.footline.attr("x1",coord.y).attr("y1",coord.x);
@@ -151,10 +152,12 @@ var DBL = false;
 var node_click_func = function(node){
 
     var key = 0;
+    var added_node = false;
     if(DBL){
         DBL = false;
         append_node($('.path_node.active'),false);
         key = 1;
+        added_node = true;
     }else{
         DBL=true;
         setTimeout(function(){DBL=false},400);
@@ -162,7 +165,8 @@ var node_click_func = function(node){
     var vbstr = $('#path_plot').attr('viewBox');
     key += Number(node.attr('key'));
     var active_info = set_active(key);
-    //we're using a weird mix of jQuery and d3, just deal with it for now
+    var start_info = {val:active_info.coordbox.val()};
+
     var viewbox = {
         x0: Number(vbstr.split(' ')[0]),
         y0: Number(vbstr.split(' ')[1]),
@@ -190,7 +194,9 @@ var node_click_func = function(node){
         change_throttled();
     });
     $(document).mouseup(function(){
-        $(document).unbind('mousemove');
+        if(added_node) record_add(active_info);
+        else record_move(start_info,active_info);
+        $(document).unbind('mousemove').unbind('mouseup');
     });
 }
 
@@ -241,30 +247,60 @@ $(document).ready(function(){
         if($('input:focus').length > 0) return;
         if(!$('.path_node.active .coord').val()) return;
         
-        var coords = parse_coords($('.path_node.active .coord').val());
-       
+        var active_coords =  $('.path_node.active .coord');
+        var coords = parse_coords(active_coords.val());
+        var key = Number($('.path_node.active').attr('num'));
         var step = Number($("#grid_size").val());
+        /*Some icky control flow here - 
+         * If arrrow keys are pressed, move the active node 1 step in the
+         * appropriate direction
+         * If enter is pressed, duplicate the active node and set the 
+         * duplicate as active
+         */
+        var start_info = {val:$('.path_node.active .coord').val()};
         switch(event.key){
             case "ArrowUp":
-                $('.path_node.active .coord').val(coords.x+step+', '+coords.y);
+                active_coords.val(coords.x+step+', '+coords.y);
                 break;
             case "ArrowDown":
-                $('.path_node.active .coord').val(coords.x-step+', '+coords.y);
+                active_coords.val(coords.x-step+', '+coords.y);
                 break;
             case "ArrowLeft":
-                $('.path_node.active .coord').val(coords.x+', '+(coords.y-step));
+                active_coords.val(coords.x+', '+(coords.y-step));
                 break;
             case "ArrowRight":
-                $('.path_node.active .coord').val(coords.x+', '+(coords.y+step));
+                active_coords.val(coords.x+', '+(coords.y+step));
                 break;
             case "Enter":
-                append_node($('.path_node.active'),false);
-                break;
-            case "delete":
-                $('.path_node.active .node_close').click();
-                break;
+                append_node($('.path_node.active'));
+                record_add(set_active(key+1));
+                return;
+            case "Tab":
+                if(event.shiftKey){
+                   if(key >1) set_active(key-1);
+                }else {
+                    var n_nodes = $('.path_node').length;
+                    if(key < n_nodes) set_active(key+1);
+                }
+                return false;
+            case "Delete":
+                var active_node = $('.path_node.active');
+                if(key > 1){
+                    var remove_info = {
+                        key: active_node.attr('num'),
+                        coordbox: active_node.find('.coord')
+                    };
+                    record_remove(remove_info);
+                    active_node.remove();
+                    update_nodenumbers();
+                    set_active(key-1);
+                }
+            default:
+                return;
         }
-        draw_path();
+        var active_info = set_active(key);
+        record_move(start_info,active_info);
+        update_active_node(active_info);
         //$('.path_node.active').trigger('change');
     });
 });

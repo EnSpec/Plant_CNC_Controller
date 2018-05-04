@@ -9,24 +9,34 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-      <a class="navbar-brand" href="#">Motor Controller</a>
+    <nav class="navbar navbar-toggleable-sm navbar-light bg-faded">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
+          <li class="nav-item current left-edge">
             <a class="nav-link" href="#">Control Panel</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item current">
+            <a class="nav-link" href="index.html">&mdash;</a>
+          </li>
+          <li class="nav-item current dropdown right-edge">
+            <a class="nav-link dropdown-toggle" 
+                data-toggle="dropdown" href="#">Help</a>
+            <ul class="dropdown-menu">
+                <button class="dropdown-item">Overview</button>
+                <button class="dropdown-item">Troubleshooting</button>
+            </ul>
+          </li>
+          <li class="nav-item ">
             <a class="nav-link" href="route_plot.html">Route Plotter</a>
           </li>
         </ul>
       </div>
-    </nav>    
+    </nav>
     <div class="container">
         <div class="row" >
             <div class = "col-sm-12">
                 <div class="row">
-                <h4>Control Panel:</h4>
+                <h4>Control Panel</h4>
                 </div>
             </div>
 
@@ -74,7 +84,7 @@
                       <input type="text" class="form-control" placeholder="10,0 0,0 10,0 0,0" id="instr">
                     </div>
                     <div class="col-3 col-sm-5 col-md-3 text-right">
-                      <button id="send" type="button" class="btn btn-primary">Send</button>
+                      <button id="send" type="button" class="btn btn-success btn-primary">Send</button>
                     </div>
                   </div>
                   <div class="row">
@@ -90,7 +100,7 @@
                   </div>
                   <div class="row">
                     <div class="col-4 col-sm-3 col-md-3">
-                      <button id="stop" type="button" class="btn btn-primary">Stop</button>
+                      <button id="stop" type="button" class="btn btn-danger btn-primary">Stop</button>
                     </div> 
                     <div class="col-5 col-sm-4 col-md-6 text-right">
                       <button id="go_home" type="button" class="btn btn-primary btn-block">Go to 0,0</button>
@@ -110,15 +120,15 @@
                           <p>(Use buttons or arrow keys)</p>
                       </div>
                       <div class="col-12 text-center">
-                          <button id="up" type="button" class="btn btn-primary keybtn">+X</button>
+                          <button id="up" type="button" class="btn btn-info keybtn">+X</button>
                       </div>
                     </div>
                     <div class="row">
                      <div class="col-12 text-center">
                       <div class="btn-group">
-                          <button id="left" type="button" class="btn btn-primary keybtn">- Y</button>
-                          <button id="dn" type="button" class="btn btn-primary keybtn">- X</button>
-                          <button id="right" type="button" class="btn btn-primary keybtn">+Y</button>
+                          <button id="left" type="button" class="btn btn-info keybtn">- Y</button>
+                          <button id="dn" type="button" class="btn btn-info keybtn">- X</button>
+                          <button id="right" type="button" class="btn btn-info keybtn">+Y</button>
                       </div>
                      </div>
                     </div>

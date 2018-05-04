@@ -1,49 +1,111 @@
 <head>
     <meta name="encoding" value="utf-8">
-    <script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui.min.js">
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/underscore-min.js"></script>
 
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    
+    <script type="text/javascript" src="js/underscore-min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+
     <title>Ardupy Motor Controller</title>
 </head>
 <body>
-    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-      <a class="navbar-brand" href="#">Motor Controller</a>
+    <!--Info box for route preview. Pops up when user clicks #route-preview-info-->
+    <div id="help-modal" class="modal" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body" id="help-modal-body" style="border-radius:5px;background:lightgray">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Navbar -->
+    <nav class="navbar navbar-toggleable-sm navbar-light bg-faded">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="index.html">Control Panel</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item current left-edge">
             <a class="nav-link" href="#">Route Plotter</a>
+          </li>
+          <li class="nav-item current">
+            <a class="nav-link" href="#">&mdash;</a>
+          </li>
+          <li class="nav-item current dropdown">
+            <a class="nav-link dropdown-toggle" 
+                data-toggle="dropdown" href="#">File</a>
+            <ul class="dropdown-menu">
+                <label id="nav_load_label" 
+                    class="dropdown-item">
+                    Load Route <input type="file" id="nav_load_nodes" hidden>
+                </label>
+                <button id="nav-save" class="dropdown-item">Save Route (Ctrl+S)</button>
+            </ul>
+          </li>
+
+          <li class="nav-item current dropdown">
+            <a class="nav-link dropdown-toggle" 
+                data-toggle="dropdown" href="#">Edit</a>
+            <ul class="dropdown-menu">
+                <button id="nav-undo" class="dropdown-item">Undo (Ctrl+Z)</button>
+                <button id="nav-redo" class="dropdown-item">Redo (Ctrl+Shift+Z)</button>
+            </ul>
+          </li>
+
+          <li class="nav-item current dropdown right-edge">
+            <a class="nav-link dropdown-toggle" 
+                data-toggle="dropdown" href="#">Help</a>
+            <ul class="dropdown-menu">
+                <button data-toggle="modal" data-target="#help-modal"
+                    class="dropdown-item" id="overview-info">Overview</button>
+                <button data-toggle="modal" data-target="#help-modal"
+                    class="dropdown-item" id="route-preview-info">Drawing Routes</button>
+                <button data-toggle="modal" data-target="#help-modal"
+                    class="dropdown-item" id="route-coord-info">Entering Coordinates</button>
+                <button data-toggle="modal" data-target="#help-modal"
+                    class="dropdown-item" id="route-options-info">Saving Routes</button>
+            </ul>
           </li>
         </ul>
       </div>
     </nav>
-    <div class="container">
+    
+    <div id="control-panel" class="container">
+    </div>
+    <div id="route-plotter" class="container">
         <div class="row" >
             <!--path node widgets-->
             <div class="col-sm-12 col-md-6 col-lg-5">
               <div class = "col-sm-12">
-                <div class="row">
-                  <h4 id='route_plot_h4'>Route Plotter:</h4>
+                <div class="row" style="margin-left:-30px">
+                  <h4 id='route_plot_h4'>Route Plotter</h4>
                   </div>
               </div>
               <div class="row menu" style="padding-bottom:5px">
-                <h5 class="col-12">Options</h5>
+                <h5 class="col-12">Options
+                    <button class='info-link' href='#' data-toggle="modal" 
+                        data-target="#help-modal" id='route-options-info'>
+                        &#128712;
+                    </button>
+                </h5>
                 <div class="col-12" style="margin-left:5px">
                   <div class="btn-group btn-block">
                     <label id="load_label" 
                         class="btn btn-file btn-primary btn-block btn-sm">
                         Load Route <input type="file" id="load_nodes" hidden>
                     </label>
-                    <button type="button" style="border-radius:3px"
+                    <button id="btn-save" type="button" style="border-radius:3px"
                         class="btn btn-primary btn-block btn-sm">
-                        <a id="dl_link" download="route.csv">Save Route &#128190;</a>
+                        Save Route &#128190;
+                        <a hidden id="dl_link" download="route.csv"></a>
                     </button>
                     <button id="clear_nodes"  type="button" style="border-radius:3px"
                         class="btn btn-Danger btn-block btn-sm">Clear Route &#10006;
@@ -64,8 +126,13 @@
                   </select>
                 </div>
               </div>
-              <div id="free-draw" class="row draw-menu">
-                <h5 class="col-12">Plot Options</h5>
+              <div id="free-draw" class="row draw-menu hidden-sm hidden-xs">
+                <h5 class="col-12">Route Coordinates
+                    <button class='info-link' href='#' data-toggle="modal" 
+                       id="route-coord-info" data-target="#help-modal">
+                        &#128712;
+                    </button>
+                </h5>
                 <div class="col-5">
                   <span>Free Draw:</span>
                 </div>
@@ -73,22 +140,23 @@
                     <button id="add_node"  type="button" class="btn btn-primary btn-sm">Add Point <b>+</b></button>
                 </div>
                 <div class="col-9" style="margin-left:1em">
-                  <span>Snap Points to Grid:
-                      &nbsp;<input class="num_form text-center" value=5 id="grid_size" type="text">
-                      &nbsp;cm
-                  </span>
                 </div>
                 <div class="col-3 text-right">
                 </div>
 
-                <div class="col-12" id="no_nodes">
-                    <!--p>Click "Add" to add a destination</p-->
+                <div class="col-12 text-center" id="no_nodes">
+                    <!-- p>Current Route is Empty</p -->
                 </div>
               </div>
-              <div id="grid-draw" style="display:none" class="row draw-menu">
-                <h5 class="col-12">Plot Options</h5>
+              <div id="grid-draw" style="display:none" class="row draw-menu ">
+                <h5 class="col-12">Route Coordinates
+                    <button class='info-link' href='#' data-toggle="modal" 
+                       id="route-coord-info" data-target="#help-modal">
+                        &#128712;
+                    </button>
+                </h5>
                 <div class="col-sm-8">
-                  <span>Specify Area:</span>
+                  <span>Area to Scan:</span>
                   <table style="margin-left:1em">
                     <tbody>
                       <tr>
@@ -124,17 +192,31 @@
                 </div>
               </div>
 
-              <ul id="path_nodes" class="row">
-                  <!-- path node 0-->
-              </ul>
+              <div class="hidden-sm-down">
+                <ul id="path_nodes" class="row ">
+                    <!-- path node 0-->
+                </ul>
+              </div>
 
             </div>
             <div class="col-lg-1 lg-spacer">
             </div>
             <!--Plot of path-->
             <div class="col-sm-12 col-md-6">
-              <div class="col-12">
-                <span style="user-select:none">Plot of Route:</span>
+             <div class="row">
+              <div class="col-sm-6">
+                  <h5 style="user-select:none">Route Preview 
+                    <button class='info-link' href='#' data-toggle="modal" 
+                        data-target="#help-modal" id='route-preview-info'>
+                        &#128712;
+                    </button>
+                  </h5>
+              </div>
+              <div class="col-sm-6" style="user-select:none">
+                  <span>Snap to grid:
+                      &nbsp;<input class="num_form text-center" value=5 id="grid_size" type="text">
+                      &nbsp;cm
+                  </span>
               </div>
               <div class="col-12">
                 <div id="canvas-border">
@@ -143,11 +225,13 @@
                 </div>
               </div>
             </div>
+            </div>
         </div>
-        <!--Hidden data uri link for save button-->
     </div>
     <script type="text/javascript" src="js/maintain_state.js"></script>
     <script type="text/javascript" src="js/d3.min.js"></script>
+    <script type="text/javascript" src="js/help_modals.js"></script>
+    <script type="text/javascript" src="js/route_plot_changebuffer.js"></script>
     <script type="text/javascript" src="js/route_plot_canvas.js"></script>
     <script type="text/javascript" src="js/route_plot_patterns.js"></script>
     <script type="text/javascript" src="js/route_plot.js"></script>

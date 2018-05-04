@@ -10,6 +10,8 @@ body{
     background-color: #b3b3b3;
     margin-bottom:10px;
     border-bottom: 1px solid #999999;
+    padding-bottom: 0px;
+    padding-top: 5px;
 }
 
 .svg-gridline{
@@ -39,7 +41,7 @@ body{
 #path_nodes{
     list-style:none;
     padding-left:15px;
-    overflow-y:scroll;
+    overflow-y:auto;
 }
 
 .path_node{
@@ -114,6 +116,15 @@ body{
     fill:#999999;
     r:8;
 }
+@media(max-width:557px){
+    .node-end{
+        r:10;
+    }
+    .node-end.active{
+        r:12;
+    }
+
+}
 .node-click:focus{
     color:#222;
     text-decoration:none;
@@ -129,10 +140,43 @@ body{
     margin-bottom:0px;
 }
 
+.dropdown-menu{
+    background: #EEE;
+    padding: 0px;
+}
 
+.nav-item.current{
+    background: lightgray;
+    margin-bottom: -1px;
+    border-top: 1px solid #999999;
+
+}
+.nav-item.current.left-edge{
+    border-left: 1px solid #999999;
+    border-radius: 5px 0 0 0;
+}
+.nav-item.current.right-edge{
+    border-right: 1px solid #999999;
+    border-radius: 0 5px 0 0;
+}
+.info-link{
+    background:none;
+    border:none;
+}
+.info-link:focus{
+    border:none;
+}
+.info-link:hover{
+    cursor:pointer;
+}
 #dl_link:hover{
     text-decoration:none;
 }
 #dl_link:focus{
     text-decoration:none;
+}
+
+.dropdown-toggle::after {
+    border: none;
+    content: none;
 }

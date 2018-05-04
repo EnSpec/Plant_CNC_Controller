@@ -1,3 +1,5 @@
+const COORD_REGEX = /^[\s*,*[0-9]+[,|\s]+[0-9]+\s*,*]?$/;
+const WAIT_REGEX = /^[\s*,*[0-9]+\s*,*]?$/;
 //re-number nodes after one is inserted or they are re-ordered
 var update_nodenumbers = function(){
     var n_nodes = $('.path_node').length;
@@ -87,7 +89,14 @@ var bind_actions_to_nodes = function(){
     $('.node_close, .node_add').unbind('click');
 
     $('.node_close').click(function(){
-        $(this).closest('.path_node').remove();
+        var parent_node = $(this).closest('.path_node');
+        var remove_info = {
+            key: parent_node.attr('num'),
+            coordbox: parent_node.find('.coord')
+
+        };
+        record_remove(remove_info);
+        parent_node.remove();
         update_nodenumbers();
     });
 
@@ -108,15 +117,14 @@ var bind_actions_to_nodes = function(){
     $('.coord, .wait').focus(function(){
         $(this).trigger('click');
     });
-    $('.coord').keydown(coord_keydown);
+    //$('.coord').keydown(coord_keydown);
     $('.coord').change(function(){
-        form_verify($(this),/^[\s*,*[0-9]+[,|\s]+[0-9]+\s*,*]?$/);
+        form_verify($(this),COORD_REGEX);
         update_active_node(set_active($(this).closest('.path_node').attr('num')));
     });
-    $('.wait').keydown(wait_keydown);
+    //$('.wait').keydown(wait_keydown);
     $('.wait').change(function(){
-        form_verify($(this),/^[\s*,*[0-9]+\s*,*]?$/);
-        update_active_node(set_active($(this).closest('.path_node').attr('num')));
+        form_verify($(this),WAIT_REGEX);
     });
 };
 
@@ -129,6 +137,7 @@ var append_node = function(idx,focus_new){
     var coord_id = "coord_"+n_nodes;
     var wait_id = "wait_"+n_nodes;
     var new_node = get_node_template();
+
     if(idx == undefined){
         $('#path_nodes').append(new_node);
         new_node.find('.coord').val("0, 0");
@@ -180,6 +189,31 @@ var set_node_pattern = function(pattern_func){
     draw_path();
 };
 
+var restore_nodes = function(){
+    external.restore_state('nodes',function(saved_nodes){
+        if(!saved_nodes){
+            $('#path_nodes').empty();
+            append_node();
+            set_active(1);
+        }else{
+            $('#path_nodes').empty();
+            var new_node;
+            _.each(saved_nodes,function(node,i){
+                if(i%2==0){
+                    new_node = get_node_template();
+                    new_node.find('.coord').val(node);
+                    $('#path_nodes').append(new_node);
+                } else {
+                    new_node.find('.wait').val(node);
+                }
+            });
+            bind_actions_to_nodes();
+            draw_path();
+            set_active($('.path_node').length);
+        }
+    });
+};
+
 var save_route_csv= function(){
     var csv_string = [];
     $('.coord,.wait').each(function(){
@@ -192,6 +226,7 @@ var save_route_csv= function(){
 };
 
 var load_route_from_csv = function(file){
+    console.log(file);
     var reader = new FileReader();
     reader.readAsText(file);
     reader.onloadend=function(){
@@ -209,7 +244,6 @@ var load_route_from_csv = function(file){
         });
         draw_path();
         bind_actions_to_nodes();
-        draw_path();
     }
 };
 
@@ -229,12 +263,13 @@ $(document).ready(function(){
     $('#path_nodes').sortable({update:update_nodenumbers});
     $('#add_node').click(function(){append_node()});
     $('#clear_nodes').click(function(){
+        record_clear();
         $('#path_nodes').empty();
         $('#no_nodes').show();
         append_node();
     });
 
-    $('#load_nodes').change(function(){
+    $('#load_nodes,#nav_load_nodes').change(function(){
         load_route_from_csv($(this).prop('files')[0]);
         //clear my value so the user can load the same file multiple times
         $(this).val(undefined);
@@ -252,9 +287,10 @@ $(document).ready(function(){
         set_node_pattern(grid_pattern);
     });
 
-    
-    $('#dl_link').mousedown(function(){
+        
+    $('#btn-save,#nav-save').click(function(){
         save_route_csv();
+        $('#dl_link')[0].click();
     });
     //set the max height of the path-node div and make it scrollable
     $(window).resize(function(){
@@ -285,8 +321,9 @@ $(document).ready(function(){
             });
         });
 
-        restore_nodes(append_node);
+        restore_nodes();
     } else {
+        append_node();
         setup_online_demo();
     }
 });

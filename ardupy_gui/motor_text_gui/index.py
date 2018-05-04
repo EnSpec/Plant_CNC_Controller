@@ -8,10 +8,14 @@ import os
 import glob
 import time
 import serial
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+from threading import Thread
 try:
     from . import echo
     SerialEcho = echo.SerialEcho
 except SystemError:
+    from echo import SerialEcho
+except ImportError:
     from echo import SerialEcho
 import serial.tools.list_ports as list_ports
 
@@ -111,17 +115,21 @@ class External(object):
 
 
 def main():
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    url= 'file://%s/index.html'%script_dir
+    #start a simple http server to host the content for CEF
+    server_address = ('127.0.0.1', 8081)
+    url= r'http://%s:%d/index.html'%server_address
     print(url)
+    httpd = HTTPServer(server_address,SimpleHTTPRequestHandler)
+    server_thread = Thread(target = httpd.serve_forever,daemon=True)
+    server_thread.start()
+    
+    
+    #set up a CEF browser
     check_versions()
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
-
-    
     cef.Initialize()
-    #set up a browser
     window_info = cef.WindowInfo()
-    window_info.SetAsChild(0, [0,0,1000,650])
+    window_info.SetAsChild(0, [0,0,1024,680])
     browser = cef.CreateBrowserSync(window_title="Ardupy Motor Controller", url=url,
             window_info=window_info)
     frame = browser.GetMainFrame()
@@ -135,6 +143,7 @@ def main():
     #enter main loop
     cef.MessageLoop()
     cef.Shutdown()
+    sys.exit(0)
 
 
 def check_versions():

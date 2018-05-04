@@ -19,29 +19,13 @@ var restore_textareas = function(){
         });
     });
 };
-
+//save the values of each node and wait box 
 var save_nodes = function(){
     var node_data = []; 
     $('.coord, .wait').each(function(){
         node_data.push($(this).val());
     });
     external.save_state('nodes',node_data);
-};
-
-var restore_nodes = function(callback){
-    //this is super slow, I don't know why yet
-    external.restore_state('nodes',function(saved_nodes){
-        if(!saved_nodes) return;
-        _.each(saved_nodes,function(node,i){
-            if(i%2==0){
-                callback();
-                $('.coord').last().val(node);
-            } else {
-                $('.wait').last().val(node);
-            }
-        });
-    });
-    $('.coord').last().trigger('change');
 };
 //restores every form on the page
 var restore_forms = function(){
