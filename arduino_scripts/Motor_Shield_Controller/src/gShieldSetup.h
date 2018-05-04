@@ -33,7 +33,7 @@ void setupGShieldPins(){
   //stepper3 (y-axis) direction pin
   pinMode(YDIR, OUTPUT);
   digitalWrite(YDIR, LOW);
-  //stepper2 step pin
+  //stepper3 step pin
   pinMode(YSTEP, OUTPUT);
   digitalWrite(YSTEP, LOW);
 };

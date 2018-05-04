@@ -15,7 +15,7 @@ SerialInts si('\0',32,10000);
 //X RANGE: 0 -> 53571 (140 cm)
 //~~ 382.8 steps per cm
 bool hasSentCurrPos, readyForNextAction, waitingOnInstruction;
-long x, y;
+long x, y, z;
 unsigned long curr_time,delay_ms;
 /* Target deterines the target action for the Motorcontroller
  * Negative targets are used internally, while positive targets can be sent
@@ -43,6 +43,7 @@ void setup() {
    readyForNextAction = true;
    x = 0;
    y = 0;
+   z = 0;
    target = ACTION_COMPLETE;
    curr_time = 0;
    delay_ms = 300;
@@ -55,9 +56,18 @@ void set_movement_target(){
   target = WAITING_TO_MOVE;
 }
 
+void set_z_movement_target(){
+  z = si.getInt();
+  //one dummy
+  si.getInt();
+  curr_time = millis();
+  target = WAITING_TO_MOVE;
+}
+
 void move_if_ready(){
     if(((millis() - curr_time) > delay_ms)){
       motors.moveToCoords(x, y);
+      motors.moveToZ(z);
       hasSentCurrPos = false;
       target= MOVING;
     }
@@ -122,6 +132,7 @@ void loop() {
   if((motors.nRunning() == 0)){
     send_current_position();
     if(target == SET_MOVEMENT_TARGET) set_movement_target();
+    if(target == SET_Z_TARGET) set_z_movement_target();
   }
 
 }

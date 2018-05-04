@@ -17,6 +17,7 @@ class TripleMotors{
     long nRunning();
     void moveToX(long xt);
     void moveToY(long yt);
+    void moveToZ(long zt);
     long getX();
     long getY();
     float getXspeed();

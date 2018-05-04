@@ -31,11 +31,14 @@ void TripleMotors::run(){
 
 void TripleMotors::moveToX(long xt){
   stepper1->moveTo(xt);
-  stepper2->moveTo(xt);
 }
 
 void TripleMotors::moveToY(long yt){
   stepper3->moveTo(yt);
+}
+
+void TripleMotors::moveToZ(long zt){
+  stepper2->moveTo(zt);
 }
 
 long TripleMotors::getX(){
