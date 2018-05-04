@@ -92,6 +92,8 @@ $(document).ready(function(){
     $('#dn').click(function(){ external.send_coords('5,0',3); });
     $('#left').click(function(){ external.send_coords('0,-5',3); });
     $('#right').click(function(){ external.send_coords('0,5',3); });
+    $('#zup').click(function(){ external.send_coords('-5,0',5); });
+    $('#zdn').click(function(){ external.send_coords('5,0',5); });
     $(window).keydown(function(event){
         //don't trigger key-based controls if the user is typing
         if($('[type=text], textarea').is(':focus'))return;

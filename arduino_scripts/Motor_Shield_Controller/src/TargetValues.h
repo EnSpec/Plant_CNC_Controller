@@ -8,4 +8,5 @@
 #define SET_DELAY 2
 #define MOVE_RELATIVE 3
 #define SET_Z_TARGET 4
+#define MOVE_ZRELATIVE 5
 #endif

@@ -41,8 +41,10 @@ class External(object):
         """Appends '1,' to each set of target_x,target_y coords in string
         then sends it to arduino using self.send
         mode determines movement type:
-        1 - absolute target
-        3 - relative target
+        1 - absolute x,y target
+        3 - relative x,y target
+        4 - absolute z target
+        5 - relative z target
         """
         mode = str(mode)
         string = self.coords_to_steps(string.replace(',',' ').split())

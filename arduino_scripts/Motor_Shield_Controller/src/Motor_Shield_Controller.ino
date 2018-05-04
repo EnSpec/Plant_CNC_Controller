@@ -102,6 +102,15 @@ void set_incremental_movement_target(){
   readyForNextAction = true;
   target = ACTION_COMPLETE;
 }
+void set_incremental_z_movement_target(){
+  //move a small z amount instantly
+  z = si.getInt();
+  si.getInt();
+  motors.moveToRelativeCoords(x, y);
+  hasSentCurrPos = false;
+  readyForNextAction = true;
+  target = ACTION_COMPLETE;
+}
 
 
 void send_current_position(){
@@ -127,6 +136,7 @@ void loop() {
   if(si.getCharCode() == 's') halt_motors();
   if(target == SET_DELAY) set_delay();
   if(target == MOVE_RELATIVE) set_incremental_movement_target();
+  if(target == MOVE_ZRELATIVE) set_incremental_z_movement_target();
   if(target == MOVING) finish_movement_target();
   if(target == WAITING_TO_MOVE) move_if_ready();
   if((motors.nRunning() == 0)){

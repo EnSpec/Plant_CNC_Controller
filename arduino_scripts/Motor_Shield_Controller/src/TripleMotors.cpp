@@ -49,6 +49,10 @@ long TripleMotors::getY(){
   return stepper3->currentPosition();
 }
 
+long TripleMotors::getZ(){
+  return stepper2->currentPosition();
+}
+
 float TripleMotors::getXspeed(){
   return stepper1->speed();
 }
@@ -98,6 +102,12 @@ void TripleMotors::moveToRelativeCoords(long x, long y){
   stepper3->setMaxSpeed(XSPEED);
   moveToX(getX()+x);
   moveToY(getY()+y);
+}
+void TripleMotors::moveToRelativeZCoords(long z){
+  stepper1->setMaxSpeed(XSPEED);
+  stepper2->setMaxSpeed(XSPEED);
+  stepper3->setMaxSpeed(XSPEED);
+  moveToZ(getZ()+z);
 }
 
 

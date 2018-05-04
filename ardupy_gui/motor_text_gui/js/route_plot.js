@@ -312,7 +312,10 @@ $(document).ready(function(){
 
         setTimeout(function(){$('#draw-mode').change()},500);
         $('#send').click(function(){
+            //set z value
+            external.send_coords($('#zval').val()+',0',4);
             var tot_delay = 1;
+            //send stream of x,y coordinates
             $('.coord').each(function(){
                 var coord = $(this);
                 setTimeout(function(){
