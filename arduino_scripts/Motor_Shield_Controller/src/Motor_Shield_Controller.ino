@@ -106,7 +106,7 @@ void set_incremental_z_movement_target(){
   //move a small z amount instantly
   z = si.getInt();
   si.getInt();
-  motors.moveToRelativeCoords(x, y);
+  motors.moveToRelativeZCoords(z);
   hasSentCurrPos = false;
   readyForNextAction = true;
   target = ACTION_COMPLETE;
@@ -120,6 +120,8 @@ void send_current_position(){
     Serial.print(motors.getX());
     Serial.print(", ");
     Serial.print(motors.getY());
+    Serial.print(", ");
+    Serial.print(motors.getZ());
   }
 }
 void loop() {

@@ -114,6 +114,14 @@ $(document).ready(function(){
                 $('#right').addClass('active').trigger('click');
                 setTimeout(function(){$('#right').removeClass('active')},500);
                 break;
+            case "=":
+                $('#zdn').addClass('active').trigger('click');
+                setTimeout(function(){$('#zdn').removeClass('active')},500);
+                break;
+            case "-":
+                $('#zup').addClass('active').trigger('click');
+                setTimeout(function(){$('#zup').removeClass('active')},500);
+                break;
         }
     });
 });

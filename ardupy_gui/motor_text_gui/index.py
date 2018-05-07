@@ -19,7 +19,9 @@ except ImportError:
     from echo import SerialEcho
 import serial.tools.list_ports as list_ports
 
-STEPS_PER_CM = 382.8
+#STEPS_PER_CM = 382.8
+#recailbration: 5/7/18
+STEPS_PER_CM = 400.249
 class External(object):
     KEY_CODES = {
         'SUM': ',s',

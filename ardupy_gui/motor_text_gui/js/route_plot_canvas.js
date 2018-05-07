@@ -1,7 +1,7 @@
-const X0 = 900;
-const Y0 = 22;
-const xScale = .185;
-const yScale = .185;
+const X0 = 860;
+const Y0 = 30;
+const xScale = .21;
+const yScale = .21;
 var path_plot_svg;
 var stepsToCanvasLoc=function(xsteps,ysteps){
     return{
@@ -50,9 +50,9 @@ var midpoint_marker = function(coord1,coord2){
 
 var edge_coords = [
     {x:0,y:0},
-    {x:150,y:0},
-    {x:150,y:140},
-    {x:0,y:140}
+    {x:135,y:0},
+    {x:135,y:155},
+    {x:0,y:155}
 ];
 
 var draw_gridlines = function(){
