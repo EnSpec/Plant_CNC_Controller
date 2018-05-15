@@ -26,10 +26,12 @@ class TripleMotors{
     void moveToCoords(long x, long y);
     void moveToRelativeCoords(long x, long y);
     void moveToRelativeZCoords(long z);
+    void setMaxSpeed(int speed);
   private:
     void updateSpeeds(long x, long y);
     AccelStepper * stepper1;
     AccelStepper * stepper2;
     AccelStepper * stepper3;
+    int xspeed;
 };
 #endif

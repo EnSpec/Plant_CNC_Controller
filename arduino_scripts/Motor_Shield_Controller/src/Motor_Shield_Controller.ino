@@ -92,6 +92,15 @@ void set_delay(){
   readyForNextAction = true;
   target = ACTION_COMPLETE;
 }
+void set_speed(){
+  int speed = si.getInt();
+  si.getInt();
+  Serial.print(" Max Speed set to ");
+  Serial.print(speed);
+  motors.setMaxSpeed(speed);
+  readyForNextAction = true;
+  target = ACTION_COMPLETE;
+}
 
 void set_incremental_movement_target(){
   //move a small amount instantly
@@ -137,6 +146,7 @@ void loop() {
   }
   if(si.getCharCode() == 's') halt_motors();
   if(target == SET_DELAY) set_delay();
+  if(target == SET_SPEED) set_speed();
   if(target == MOVE_RELATIVE) set_incremental_movement_target();
   if(target == MOVE_ZRELATIVE) set_incremental_z_movement_target();
   if(target == MOVING) finish_movement_target();

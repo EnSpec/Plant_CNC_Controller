@@ -36,7 +36,7 @@ void SerialInts::parse_byte(){
     _bytes[_curr_byte++] = _in_byte;
     if(!_in_byte){
       //FIXME this doesn't work if _sep .NE. '\0'
-      if(_curr_byte>1)_values.push(atoi(_bytes));
+      if(_curr_byte>1)_values.push(atol(_bytes));
       _curr_byte = 0;
 
     }

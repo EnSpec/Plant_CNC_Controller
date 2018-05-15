@@ -9,4 +9,5 @@
 #define MOVE_RELATIVE 3
 #define SET_Z_TARGET 4
 #define MOVE_ZRELATIVE 5
+#define SET_SPEED 6
 #endif

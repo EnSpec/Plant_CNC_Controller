@@ -113,10 +113,18 @@
                   </div>
                 </div>
                 <div class="col-12" style="margin-left:5px">
-                    <button id="send"  type="button" 
-                      class="btn btn-success btn-block btn-sm">
-                        Send Route to Arduino &#10145;
-                    </button>
+                    <div class="btn-group btn-block">
+                        <button id="send"  type="button" 
+                          style="margin-top:8px;border-radius:3px"
+                          class="btn btn-success btn-block btn-sm">
+                            Send to Arduino &#10145;
+                        </button>
+                        <button id="sched"  type="button" data-toggle="modal"
+                          style="border-radius:3px" data-target="#help-modal"
+                          class="btn btn-success btn-block btn-sm">
+                            Schedule &#128336; ...
+                        </button>
+                    </div>
                 </div>
                 <div class="col-12" style="margin-left:5px">
                   <span>Plot Mode: </span>
@@ -191,7 +199,10 @@
 
               <div class="row">
                 <div class="col-12">
-                  Z coordinate: <input type="text" class="coord" id="zval" value="0">
+                  Scan Height: <input type="text" class="zcoord" id="zval" value="0"> cm
+                </div>
+                <div class="col-12">
+                  Scan Speed: <input type="text" class="zcoord" id="spd" value="3.75"> cm/s
                 </div>
               </div>
               <div class="hidden-sm-down">
@@ -236,5 +247,6 @@
     <script type="text/javascript" src="js/route_plot_changebuffer.js"></script>
     <script type="text/javascript" src="js/route_plot_canvas.js"></script>
     <script type="text/javascript" src="js/route_plot_patterns.js"></script>
+    <script type="text/javascript" src="js/route_plot_schedule.js"></script>
     <script type="text/javascript" src="js/route_plot.js"></script>
 </body>

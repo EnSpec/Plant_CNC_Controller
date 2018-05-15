@@ -60,11 +60,12 @@ $(document).ready(function(){
 
 
     //Clicking 'Set Delay' or pressing enter in form sets delay
-    $('#set_delay').click(function(){
-        external.send_delay(val_or_placeholder($('#delay_val')));
+    $('#set_speed').click(function(){
+        var speed = val_or_placeholder($('#speed_val'));
+        external.send_coords(speed+","+speed,6);
     });
-    $('#delay_val').keydown(function(event){
-        if(event.keyCode == 13) $('#set_delay').trigger('click');
+    $('#speed_val').keydown(function(event){
+        if(event.keyCode == 13) $('#set_speed').trigger('click');
     });
     
     $('#stop').click(function(){

@@ -60,14 +60,12 @@ var form_verify = function(form,regex){
 var get_node_template = function(){
     var n_nodes = $('.path_node').length+1;
     var coord_id = "coord_"+n_nodes;
-    var wait_id = "wait_"+n_nodes;
     return new_node = $(`<li class="col-12 path_node" num=${n_nodes}>
           <div class="row">
             <div class="col-12">
                 <span>
                 <span class="node_num">${n_nodes}.</span>
-                Go to <input class="coord" id=${coord_id} placeholder="0 , 0" type="text">,
-                wait <input class="wait" id=${wait_id} placeholder="0" type="text">s
+                Go to <input class="coord" id=${coord_id} placeholder="0 , 0" type="text"> cm
                 </span>
 
                 <span class='node_opts'>
@@ -106,15 +104,15 @@ var bind_actions_to_nodes = function(){
 
     //unbind previous function attachments so that things are
     //only called once
-    $('.coord, .wait, .path_node')
+    $('.coord, .path_node')
         .unbind('keydown')
         .unbind('click')
         .unbind('change');
 
-    $('.coord, .wait, .path_node').click(function(){
+    $('.coord, .path_node').click(function(){
         set_active($(this).closest('.path_node').attr('num'));
     });
-    $('.coord, .wait').focus(function(){
+    $('.coord').focus(function(){
         $(this).trigger('click');
     });
     //$('.coord').keydown(coord_keydown);
@@ -135,7 +133,6 @@ var append_node = function(idx,focus_new){
     $('#no_nodes').hide();
     var n_nodes = $('.path_node').length+1;
     var coord_id = "coord_"+n_nodes;
-    var wait_id = "wait_"+n_nodes;
     var new_node = get_node_template();
 
     if(idx == undefined){
@@ -144,7 +141,6 @@ var append_node = function(idx,focus_new){
     }else{
         idx.after(new_node);
         new_node.find('.coord').val(idx.find('.coord').val());
-        new_node.find('.wait').val(idx.find('.wait').val());
     }
 
     update_nodenumbers();
@@ -199,13 +195,9 @@ var restore_nodes = function(){
             $('#path_nodes').empty();
             var new_node;
             _.each(saved_nodes,function(node,i){
-                if(i%2==0){
                     new_node = get_node_template();
                     new_node.find('.coord').val(node);
                     $('#path_nodes').append(new_node);
-                } else {
-                    new_node.find('.wait').val(node);
-                }
             });
             bind_actions_to_nodes();
             draw_path();
@@ -216,10 +208,10 @@ var restore_nodes = function(){
 
 var save_route_csv= function(){
     var csv_string = [];
-    $('.coord,.wait').each(function(){
-        var suffix =$(this).hasClass('coord')?', ':'%0A';
+    $('.zcoord,.coord').each(function(){
         var val = $(this).val() || $(this).attr('placeholder');
-        csv_string.push(val+suffix);
+        csv_string.push(val);
+        csv_string.push('%0A');
     });
     csv_string = csv_string.join('');
     $('#dl_link').attr('href','data:application/csv;charset=utf-8,'+csv_string);
@@ -231,14 +223,16 @@ var load_route_from_csv = function(file){
     reader.readAsText(file);
     reader.onloadend=function(){
         var result = reader.result;
+        var lines = result.split('\n');
         $('#path_nodes').empty();
-        _.each(result.split('\n'),function(line){
+        $('#zval').val(lines[0]);
+        $('#spd').val(lines[1]);
+        _.each(_.rest(lines,2),function(line){
             console.log(line);
             var vals = line.split(',');
-            if(vals.length == 3){
+            if(vals.length == 2){
                 var new_node = get_node_template();
                 new_node.find('.coord').val(vals[0] + ', '+ vals[1]);
-                new_node.find('.wait').val(vals[2]);
                 $('#path_nodes').append(new_node);
             }
         });
@@ -268,7 +262,6 @@ $(document).ready(function(){
         $('#no_nodes').show();
         append_node();
     });
-
     $('#load_nodes,#nav_load_nodes').change(function(){
         load_route_from_csv($(this).prop('files')[0]);
         //clear my value so the user can load the same file multiple times
@@ -312,9 +305,12 @@ $(document).ready(function(){
 
         setTimeout(function(){$('#draw-mode').change()},500);
         $('#send').click(function(){
+            external.send_coords($('#spd').val()+',0',6);
             //set z value
-            external.send_coords($('#zval').val()+',0',4);
-            var tot_delay = 1;
+            setTimeout(function(){
+                external.send_coords($('#zval').val()+',0',4);
+            },500);
+            var tot_delay = 4;
             //send stream of x,y coordinates
             $('.coord').each(function(){
                 var coord = $(this);

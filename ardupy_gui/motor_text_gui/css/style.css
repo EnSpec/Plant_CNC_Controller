@@ -32,7 +32,7 @@ body{
     font-family:'monospace';
 }
 
-.coord,.double_num_form{
+.coord,.zcoord,.double_num_form{
     height:1.3em;
     width:5.5em;
     font-family:'monospace';
