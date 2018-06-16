@@ -52,6 +52,10 @@ void setup() {
 void set_movement_target(){
   x = si.getInt();
   y = si.getInt();
+  Serial.print(" Target set to ");
+  Serial.print(x);
+  Serial.print(", ");
+  Serial.print(y);
   curr_time = millis();
   target = WAITING_TO_MOVE;
 }
@@ -145,12 +149,13 @@ void loop() {
     readyForNextAction = false;
   }
   if(si.getCharCode() == 's') halt_motors();
-  if(target == SET_DELAY) set_delay();
-  if(target == SET_SPEED) set_speed();
-  if(target == MOVE_RELATIVE) set_incremental_movement_target();
-  if(target == MOVE_ZRELATIVE) set_incremental_z_movement_target();
-  if(target == MOVING) finish_movement_target();
-  if(target == WAITING_TO_MOVE) move_if_ready();
+  else if(target == SET_DELAY) set_delay();
+  else if(target == SET_SPEED) set_speed();
+  else if(target == MOVE_RELATIVE) set_incremental_movement_target();
+  else if(target == MOVE_ZRELATIVE) set_incremental_z_movement_target();
+  else if(target == MOVING) finish_movement_target();
+  else if(target == WAITING_TO_MOVE) move_if_ready();
+
   if((motors.nRunning() == 0)){
     send_current_position();
     if(target == SET_MOVEMENT_TARGET) set_movement_target();

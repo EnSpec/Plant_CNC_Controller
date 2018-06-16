@@ -324,10 +324,11 @@ $(document).ready(function(){
                 var speed = $(this).find('.speed');
                 setTimeout(function(){
                     external.send_coords(speed.val()+',0',6);
-                }, (tot_delay++)*500);
+                }, tot_delay*1000);
                 setTimeout(function(){
                     external.send_coords(coord.val());
-                }, tot_delay*500+250);
+                }, tot_delay*1000+500);
+                tot_delay++;
             });
         });
 

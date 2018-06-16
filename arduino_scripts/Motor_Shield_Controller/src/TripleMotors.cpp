@@ -85,7 +85,6 @@ void TripleMotors::updateSpeeds(long x, long y){
   long dy = getY() - y;
   if(dx == 0){
     stepper1->setMaxSpeed(xspeed);
-    stepper2->setMaxSpeed(xspeed);
     return;
   }
   if(dy == 0){
