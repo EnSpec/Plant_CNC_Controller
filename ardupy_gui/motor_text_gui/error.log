@@ -199,3 +199,21 @@ AttributeError: module 'tkinter' has no attribute 'filedialog'
   File "cefpython_py35.pyx", line 794, in cefpython_py35.CreateBrowserSync (cefpython_py35.cpp:100476)
 Exception: Invalid argument: port
 
+
+[2018-06-16 12:44:59] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py36.V8FunctionHandler_Execute (cefpython_py36.cpp:96736)
+  File "index.py", line 52, in send_coords
+    string = self.coords_to_steps(string.replace(',',' ').split())
+  File "index.py", line 40, in coords_to_steps
+    return [str(int(float(c)*STEPS_PER_CM)) for c in coord_list]
+  File "index.py", line 40, in <listcomp>
+    return [str(int(float(c)*STEPS_PER_CM)) for c in coord_list]
+ValueError: could not convert string to float: 'undefined'
+
+
+[2018-06-16 12:46:12] Traceback (most recent call last):
+  File "v8function_handler.pyx", line 42, in cefpython_py36.V8FunctionHandler_Execute (cefpython_py36.cpp:96736)
+  File "index.py", line 52, in send_coords
+    string = self.coords_to_steps(string.replace(',',' ').split())
+AttributeError: 'NoneType' object has no attribute 'replace'
+

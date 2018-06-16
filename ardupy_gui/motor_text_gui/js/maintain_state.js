@@ -22,7 +22,7 @@ var restore_textareas = function(){
 //save the values of each node and wait box 
 var save_nodes = function(){
     var node_data = []; 
-    $('.coord, .wait').each(function(){
+    $('.coord,.speed').each(function(){
         node_data.push($(this).val());
     });
     external.save_state('nodes',node_data);

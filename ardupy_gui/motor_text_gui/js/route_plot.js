@@ -60,12 +60,15 @@ var form_verify = function(form,regex){
 var get_node_template = function(){
     var n_nodes = $('.path_node').length+1;
     var coord_id = "coord_"+n_nodes;
+    var spd = $('#spd').val();
     return new_node = $(`<li class="col-12 path_node" num=${n_nodes}>
           <div class="row">
             <div class="col-12">
                 <span>
                 <span class="node_num">${n_nodes}.</span>
-                Go to <input class="coord" id=${coord_id} placeholder="0 , 0" type="text"> cm
+                Go to <input class="coord" id=${coord_id} 
+                    placeholder="0 , 0" type="text"> at
+                <input type="text" class="zcoord speed" value=${spd}> cm/s
                 </span>
 
                 <span class='node_opts'>
@@ -195,9 +198,13 @@ var restore_nodes = function(){
             $('#path_nodes').empty();
             var new_node;
             _.each(saved_nodes,function(node,i){
-                    new_node = get_node_template();
-                    new_node.find('.coord').val(node);
-                    $('#path_nodes').append(new_node);
+                    if(i%2 == 0){
+                        new_node = get_node_template();
+                        new_node.find('.coord').val(node);
+                        $('#path_nodes').append(new_node);
+                    }else{
+                        new_node.find('.speed').val(node);
+                    }
             });
             bind_actions_to_nodes();
             draw_path();
@@ -305,18 +312,22 @@ $(document).ready(function(){
 
         setTimeout(function(){$('#draw-mode').change()},500);
         $('#send').click(function(){
-            external.send_coords($('#spd').val()+',0',6);
+            //external.send_coords($('#spd').val()+',0',6);
             //set z value
             setTimeout(function(){
                 external.send_coords($('#zval').val()+',0',4);
             },500);
-            var tot_delay = 4;
+            var tot_delay = 2; 
             //send stream of x,y coordinates
-            $('.coord').each(function(){
-                var coord = $(this);
+            $('.path_node').each(function(){
+                var coord = $(this).find('.coord');
+                var speed = $(this).find('.speed');
+                setTimeout(function(){
+                    external.send_coords(speed.val()+',0',6);
+                }, (tot_delay++)*500);
                 setTimeout(function(){
                     external.send_coords(coord.val());
-                }, (tot_delay++)*500);
+                }, tot_delay*500+250);
             });
         });
 
