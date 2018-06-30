@@ -215,10 +215,18 @@ var restore_nodes = function(){
 
 var save_route_csv= function(){
     var csv_string = [];
-    $('.zcoord,.coord').each(function(){
+    csv_string.push($('#zval').val());
+    csv_string.push('%0A');
+    csv_string.push($('#spd').val());
+    csv_string.push('%0A');
+    $('.coord,.speed').each(function(){
         var val = $(this).val() || $(this).attr('placeholder');
         csv_string.push(val);
-        csv_string.push('%0A');
+        if($(this).hasClass('coord')){
+            csv_string.push(',');
+        }else{
+            csv_string.push('%0A');
+        }
     });
     csv_string = csv_string.join('');
     $('#dl_link').attr('href','data:application/csv;charset=utf-8,'+csv_string);
@@ -237,9 +245,10 @@ var load_route_from_csv = function(file){
         _.each(_.rest(lines,2),function(line){
             console.log(line);
             var vals = line.split(',');
-            if(vals.length == 2){
+            if(vals.length == 3){
                 var new_node = get_node_template();
                 new_node.find('.coord').val(vals[0] + ', '+ vals[1]);
+                new_node.find('.speed').val(vals[2]);
                 $('#path_nodes').append(new_node);
             }
         });
@@ -261,6 +270,7 @@ var setup_online_demo = function(){
 };
 
 $(document).ready(function(){
+    setInterval(external.echo(function(text){console.log(text)}),500);
     $('#path_nodes').sortable({update:update_nodenumbers});
     $('#add_node').click(function(){append_node()});
     $('#clear_nodes').click(function(){
@@ -314,21 +324,24 @@ $(document).ready(function(){
         $('#send').click(function(){
             //external.send_coords($('#spd').val()+',0',6);
             //set z value
-            setTimeout(function(){
-                external.send_coords($('#zval').val()+',0',4);
-            },500);
-            var tot_delay = 2; 
+            external.send_coords($('#zval').val()+',0',4);
+            var tot_delay = 1; 
+            var old_speed = 0;
             //send stream of x,y coordinates
             $('.path_node').each(function(){
-                var coord = $(this).find('.coord');
-                var speed = $(this).find('.speed');
+                var coord = $(this).find('.coord').val();
+                var speed = $(this).find('.speed').val();
+                //only update speed if it changed between waypoints
+                if(old_speed != speed){
+                    setTimeout(function(){
+                        external.send_coords(speed+',0',6);
+                    }, tot_delay*500);
+                    tot_delay+=2;
+                    old_speed = speed;
+                }
                 setTimeout(function(){
-                    external.send_coords(speed.val()+',0',6);
-                }, tot_delay*1000);
-                setTimeout(function(){
-                    external.send_coords(coord.val());
-                }, tot_delay*1000+500);
-                tot_delay++;
+                    external.send_coords(coord);
+                }, (tot_delay++)*500);
             });
         });
 

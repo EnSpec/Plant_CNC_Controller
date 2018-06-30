@@ -30,6 +30,7 @@ unsigned long curr_time,delay_ms;
  * -3 : Slow down and stop
  */
 int target;
+int idle_count;
 
 
 void setup() {
@@ -106,6 +107,13 @@ void set_speed(){
   target = ACTION_COMPLETE;
 }
 
+void idle(){
+  if((idle_count--) <= 0){
+    readyForNextAction = true;
+    target = ACTION_COMPLETE;
+  }
+}
+
 void set_incremental_movement_target(){
   //move a small amount instantly
   x = si.getInt();
@@ -155,6 +163,7 @@ void loop() {
   else if(target == MOVE_ZRELATIVE) set_incremental_z_movement_target();
   else if(target == MOVING) finish_movement_target();
   else if(target == WAITING_TO_MOVE) move_if_ready();
+  else if(target == IDLE) idle();
 
   if((motors.nRunning() == 0)){
     send_current_position();

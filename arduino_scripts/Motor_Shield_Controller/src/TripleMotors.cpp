@@ -83,11 +83,11 @@ void TripleMotors::moveToCoords(long x, long y){
 void TripleMotors::updateSpeeds(long x, long y){
   long dx = getX() - x;
   long dy = getY() - y;
-  if(dx == 0){
+  if(dy == 0){
     stepper1->setMaxSpeed(xspeed);
     return;
   }
-  if(dy == 0){
+  if(dx == 0){
     stepper3->setMaxSpeed(xspeed);
     return;
   }
